@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ספר המתכונים שלי</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e07a5f;
+            --primary-dark: #c85a3f;
+            --secondary: #3d405b;
+            --bg: #f4f1de;
+            --card-bg: #ffffff;
+            --text: #2b2d42;
+            --dairy: #3a86ff;
+            --meat: #e63946;
+            --pareve: #2a9d8f;
+            --shadow: 0 4px 15px rgba(0,0,0,0.06);
+            --radius: 14px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: var(--text);
+            padding-bottom: 50px;
+            direction: rtl;
+        }
+
+        header {
+            background: linear-gradient(135deg, #3d405b 0%, #2b2d42 100%);
+            color: white;
+            padding: 40px 20px 30px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        header p {
+            opacity: 0.85;
+            font-size: 1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .controls-section {
+            background: white;
+            margin-top: -20px;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 45px 14px 15px;
+            font-size: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(224, 122, 95, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: #8d99ae;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-btn {
+            padding: 8px 18px;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--secondary);
+        }
+
+        .filter-btn:hover {
+            background: #f1f3f5;
+        }
+
+        .filter-btn.active {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+
+        .filter-btn.dairy.active { background: var(--dairy); border-color: var(--dairy); }
+        .filter-btn.meat.active { background: var(--meat); border-color: var(--meat); }
+        .filter-btn.pareve.active { background: var(--pareve); border-color: var(--pareve); }
+
+        .stats-bar {
+            margin: 20px 0 10px;
+            font-size: 0.95rem;
+            color: #6c757d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .recipe-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 22px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-top: 5px solid #ccc;
+            position: relative;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .recipe-card.category-חלבי { border-top-color: var(--dairy); }
+        .recipe-card.category-בשרי { border-top-color: var(--meat); }
+        .recipe-card.category-פרווה { border-top-color: var(--pareve); }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            gap: 10px;
+        }
+
+        .recipe-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .badge.חלבי { background-color: var(--dairy); }
+        .badge.בשרי { background-color: var(--meat); }
+        .badge.פרווה { background-color: var(--pareve); }
+
+        .tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background: #f1f3f5;
+            color: #495057;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+        }
+
+        .recipe-section {
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-content {
+            color: #495057;
+            line-height: 1.5;
+            white-space: pre-line;
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 8px;
+            border-right: 3px solid #e9ecef;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .card-footer {
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid #f1f3f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .btn-link:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .fav-btn {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: #ced4da;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .fav-btn.active {
+            color: #ff4d6d;
+        }
+
+        .fav-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px 20px;
+            color: #8d99ae;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 600px) {
+            .controls-section {
+                padding: 15px;
+            }
+            .recipes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>🍳 ספר המתכונים שלי</h1>
+            <p>חיפוש, סינון וניהול מועדפים מתוך 46 מתכונים מובחרים</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="controls-section">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="חפש לפי שם מתכון, רכיב, או תגית...">
+            </div>
+
+            <div class="filters">
+                <span style="font-weight: 600; font-size: 0.9rem; margin-left: 5px;">סינון לפי:</span>
+                <button class="filter-btn active" data-category="all">הכל</button>
+                <button class="filter-btn dairy" data-category="חלבי">חלבי</button>
+                <button class="filter-btn meat" data-category="בשרי">בשרי</button>
+                <button class="filter-btn pareve" data-category="פרווה">פרווה</button>
+                <button class="filter-btn" data-category="favorites">⭐ מועדפים</button>
+            </div>
+        </section>
+
+        <div class="stats-bar">
+            <span id="recipeCount">מציג 0 מתכונים</span>
+        </div>
+
+        <div class="recipes-grid" id="recipesContainer">
+            <!-- מתכונים יוטענו דינמית -->
+        </div>
+    </main>
+
+    <script>
+        const recipesData = [
+  {
+    "id": 1,
+    "title": "אוזני המן קלאסיות במילוי נוטלה",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי",
+      "פורים"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://foody.co.il/foody_recipe/%d7%90%d7%95%d7%96%d7%a0%d7%99-%d7%94%d7%9e%d7%9f-%d7%a7%d7%9c%d7%a1%d7%99%d7%95%d7%aa-%d7%91%d7%9e%d7%99%d7%9c%d7%95%d7%99-%d7%a0%d7%95%d7%98%d7%9c%d7%94/"
+  },
+  {
+    "id": 2,
+    "title": "פררו רושה ביתי",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי",
+      "שוקולד"
+    ],
+    "ingredients": "60 גר' אגוזי לוז קלויים גרוסים, 60 גר' גליליות במילוי אגוזים גרוסים/פייטה, 150 גר' מחית פרלינה, 19 אגוזי לוז שלמים קלופים וקלויים, 200 גר' שוקולד מריר מומס, 3 כפות שבבי פייטה.",
+    "instructions": "ממיסים שוקולד מריר, מערבבים את כל החומרים יחד, מכניסים למקרר עד להתקשות קלה. יוצרים כדורים ובאמצע כל כדור שמים אגוז לוז שלם. מצפים בשוקולד מומס עם שבבי פייטה.",
+    "link": "https://www.mako.co.il/food-cooking_magazine/SOS/Recipe-bd7cfae0b015f61026.htm?utm_source=Whatsapp&utm_medium=Share&Partner=Whatsapp_Share"
+  },
+  {
+    "id": 3,
+    "title": "קינוח שוקולד ופקאן",
+    "category": "פרווה",
+    "tags": [
+      "קינוח",
+      "פרווה",
+      "שוקולד"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.10dakot.co.il/recipe/%D7%9E%D7%9E%D7%AA%D7%A7-%D7%A9%D7%95%D7%A7%D7%95%D7%9C%D7%93-%D7%95%D7%A4%D7%A7%D7%90%D7%9F/"
+  },
+  {
+    "id": 4,
+    "title": "לחם/לחמניה עם גבינה (בואיקוס)",
+    "category": "חלבי",
+    "tags": [
+      "חלבי",
+      "מאפים"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%91%D7%95%D7%90%D7%99%D7%A7%D7%95%D7%A1/"
+  },
+  {
+    "id": 5,
+    "title": "פיש אנד צ'יפס דניס",
+    "category": "פרווה",
+    "tags": [
+      "פרווה",
+      "עיקריות",
+      "דגים"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%A4%D7%99%D7%A9-%D7%A6%D7%99%D7%A4%D7%A1/"
+  },
+  {
+    "id": 6,
+    "title": "רביולי",
+    "category": "חלבי",
+    "tags": [
+      "חלבי",
+      "עיקריות",
+      "פסטה"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://food.walla.co.il/item/3143786"
+  },
+  {
+    "id": 7,
+    "title": "מילוי רביולי 3 גבינות",
+    "category": "חלבי",
+    "tags": [
+      "חלבי",
+      "פסטה"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.matkonimil.co.il/blog/recipes/%d7%a8%d7%91%d7%99%d7%95%d7%9c%d7%99-%d7%91%d7%9e%d7%99%d7%9c%d7%95%d7%99-3-%d7%92%d7%91%d7%99%d7%a0%d7%95%d7%aa/"
+  },
+  {
+    "id": 8,
+    "title": "לחם פצפצים / לחמניית בזיליקום / חלה",
+    "category": "פרווה",
+    "tags": [
+      "פרווה",
+      "מאפים",
+      "לחם"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%9C%D7%97%D7%9D-%D7%A4%D7%A6%D7%A4%D7%A6%D7%99%D7%9D/"
+  },
+  {
+    "id": 9,
+    "title": "פסטת עדשים וכוסמין בפסטו קישואים ושקדים",
+    "category": "פרווה",
+    "tags": [
+      "פרווה",
+      "עיקריות",
+      "פסטה"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.hashulchan.co.il/מתכונים/פסטת-עדשים-וכוסמין-בפסטו-קישואים/"
+  },
+  {
+    "id": 10,
+    "title": "בואיקוס קשקבל ותרד",
+    "category": "חלבי",
+    "tags": [
+      "חלבי",
+      "מאפים"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%91%D7%95%D7%90%D7%99%D7%A7%D7%95%D7%A1-%D7%A7%D7%A9%D7%A7%D7%91%D7%9C-%D7%95%D7%AA%D7%A8%D7%93/"
+  },
+  {
+    "id": 11,
+    "title": "עוגת אוראו קלה",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי",
+      "עוגות"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%A2%D7%95%D7%92%D7%AA-%D7%90%D7%95%D7%A8%D7%90%D7%95-%D7%94%D7%95%D7%A8%D7%A1%D7%AA/"
+  },
+  {
+    "id": 12,
+    "title": "עוגיות שוקולד צ'יפס",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי",
+      "עוגיות"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.krutit.co.il/%D7%A2%D7%95%D7%92%D7%99%D7%95%D7%AA-%D7%A9%D7%95%D7%A7%D7%95%D7%9C%D7%93-%D7%A6%D7%99%D7%A4%D7%A1-%D7%92%D7%9B%D7%99-%D7%98%D7%A2%D7%99%D7%9E%D7%95%D7%AA-%D7%91%D7%A2%D7%95%D7%9C%D7%9D/"
+  },
+  {
+    "id": 13,
+    "title": "עוגת תפוחים",
+    "category": "פרווה",
+    "tags": [
+      "קינוח",
+      "פרווה",
+      "עוגות"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.metukimsheli.com/2013/11/6803/"
+  },
+  {
+    "id": 14,
+    "title": "מרנג נשיקות",
+    "category": "פרווה",
+    "tags": [
+      "קינוח",
+      "פרווה"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://food.walla.co.il/item/3226896"
+  },
+  {
+    "id": 15,
+    "title": "טארט שוקולד וקרמל מלוח",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי",
+      "עוגות"
+    ],
+    "ingredients": "לפי המתכון שבקישור (במקום גלוקוז משתמשים בדבש)",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.lichtenstadt.com/2015/09/chocolate-caramel-tart/"
+  },
+  {
+    "id": 16,
+    "title": "רוזלך",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי",
+      "מאפים"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.haaretz.co.il/food/recipes/RECIPE-1.2898991"
+  },
+  {
+    "id": 17,
+    "title": "לחם שום ומוצרלה",
+    "category": "חלבי",
+    "tags": [
+      "חלבי",
+      "מאפים",
+      "לחם"
+    ],
+    "ingredients": "בצק: 3/4 כוס חלב, כף שמרים, כף סוכר, כפית מלח, ביצה, 2.5 כוסות קמח, 30 גרם חמאה.\nמלית: ראש שום כתוש, 70 גרם חמאה, כפית דבש, תימין, מוצרלה.",
+    "instructions": "מערבבים חומרי בצק ומתפיחים שעה. מערבבים חומרי מלית. מרדדים למלבן, מורחים מלית, מפזרים מוצרלה, עורמים מלבנים קטנים בתבנית. מתפיחים 15 דק'. אופים ב-170 מעלות חצי שעה.",
+    "link": ""
+  },
+  {
+    "id": 18,
+    "title": "עוגת לוטוס",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי",
+      "עוגות"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.mako.co.il/food-recipes/recipes_column-dairy_recipes/Recipe-a8e9f7a7b5b4e31006.htm"
+  },
+  {
+    "id": 19,
+    "title": "פאי לימון",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי",
+      "עוגות"
+    ],
+    "ingredients": "לפי המתכון שבסרטון",
+    "instructions": "לפי המתכון שבסרטון",
+    "link": "https://youtu.be/IjaGuMKIyec"
+  },
+  {
+    "id": 20,
+    "title": "עוגת שוקולד",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי",
+      "עוגות"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.tavshilim.co.il/recipe/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D-%D7%9C%D7%A2%D7%95%D7%92%D7%95%D7%AA/%D7%A2%D7%95%D7%92%D7%AA-%D7%A9%D7%95%D7%A7%D7%95%D7%9C%D7%93/"
+  },
+  {
+    "id": 21,
+    "title": "מחית פיסטוק (ללא גלוטן)",
+    "category": "פרווה",
+    "tags": [
+      "פרווה",
+      "ללא גלוטן",
+      "קינוח"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.yehudit-aviv.co.il/%D7%9C%D7%9C%D7%90-%D7%92%D7%9C%D7%95%D7%98%D7%9F/%D7%9E%D7%97%D7%99%D7%AA-%D7%A4%D7%99%D7%A1%D7%98%D7%95%D7%A7/"
+  },
+  {
+    "id": 22,
+    "title": "עוגיות ג'ינג'ר בראד (4 מגשים)",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי",
+      "עוגיות"
+    ],
+    "ingredients": "1 כוס סוכר דמררה (200 גר'), 200 גר' חמאה רכה, 1 כוס סילאן (360 גר'), 0.5 כוס מים (120 גר'), 5 כוסות קמח מלא 70% (כמעט 1 ק\"ג), 1.5 כפית מלח, 0.5 כפית אגוז מוסקט, 0.5 כפית ציפורן, 1 כפית סודה לשתייה, 2 כפיות אבקת אפייה, 1.5 כפית ג'ינג'ר טחון, קורט פלפל אנגלי.",
+    "instructions": "1. מערבלים סוכר וחמאה, מוסיפים סילאן ומים.\n2. בקערה נפרדת מנפים יבשים ותבלינים.\n3. מאחדים לבצק אחיד ומקררים כשעתיים.\n4. מרדדים לעובי כ-1/2 ס\"מ, קורצים צורות ואופים ב-190 מעלות כ-10-12 דקות.",
+    "link": ""
+  },
+  {
+    "id": 23,
+    "title": "גלידת ממרח ושברי אוראו",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי",
+      "גלידה"
+    ],
+    "ingredients": "2 מיכלי שמנת להקצפה + 200 מ\"ל שמנת להקצפה, 1 פחית חלב מרוכז, 3 כפות ממרח (נוטלה/חמאת בוטנים/לוטוס/פיסטוק), שברי עוגיות אוראו.",
+    "instructions": "מקציפים 2 שמנת עד יציבות, מוסיפים חלב מרוכז ומקציפים עוד דקה. בנפרד מערבבים 200 מ\"ל שמנת עם הממרח ומקפלים פנימה. בקופסה שמים שברי אוראו בתחתית ובבלילה, ומקפיאים לפחות 6 שעות.",
+    "link": ""
+  },
+  {
+    "id": 24,
+    "title": "כנאפה (8 מנות גדולות)",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי"
+    ],
+    "ingredients": "0.5 ק\"ג שערות קדאיף, 1/2 כוס שמן קנולה, גבינת טובורג, גבינת שמנת 30%, פירורי פיסטוק קלויים.\nלסירופ: 1.5 כוסות סוכר, 1 כוס מים, מיץ מ-3/4 לימון.",
+    "instructions": "1. מערבבים קדאיף עם שמן.\n2. מסדרים חצי מהקדאיף במחבת כבדה משומנת, מניחים גבינות, ומכסים בשאר הקדאיף.\n3. מבשלים על הגז (מסובבים כל 15 שניות), הופכים ומבשלים את הצד השני.\n4. מכינים סירופ מורתח מסוכר, מים ולימון.\n5. יוצקים את הסירופ החם על הכנאפה ומפזרים פיסטוקים.",
+    "link": ""
+  },
+  {
+    "id": 25,
+    "title": "אורז לסושי",
+    "category": "פרווה",
+    "tags": [
+      "פרווה",
+      "תוספות",
+      "אסייתי"
+    ],
+    "ingredients": "3 כוסות אורז סושי (שטוף היטב), 4.5 כוסות מים, 3 כפיות סוכר, 1 כפית מלח, חומץ (בגובה 3 ס\"מ).",
+    "instructions": "שוטפים אורז, מוסיפים מים ומביאים לרתיחה. מבשלים על אש נמוכה 15 דקות. מתבלים בסוכר, מלח וחומץ.",
+    "link": ""
+  },
+  {
+    "id": 26,
+    "title": "בקלוואה של סבתא",
+    "category": "פרווה",
+    "tags": [
+      "קינוח",
+      "פרווה",
+      "מאפים"
+    ],
+    "ingredients": "דפי בצק פילו, 200 גר' אגוזים טחונים + 1 כף סוכר, שמן למריחה.\nלסירופ: 1.25 כוסות סוכר, 1 כוס מים, 2 כפות מיץ לימון.",
+    "instructions": "חותכים פילו ל-5 פסים. מורחים שמן, מפזרים אגוזים ומגלגלים. מסדרים צפוף בתבנית משומנת ומורחים מעט שמן. אופים ב-180 מעלות. מרתיחים סוכר ומים עד הסמכה, מוסיפים לימון ויוצקים את הסירופ החם על הבקלוואה.",
+    "link": ""
+  },
+  {
+    "id": 27,
+    "title": "בצק פיצה (ל-5 פיצות)",
+    "category": "חלבי",
+    "tags": [
+      "חלבי",
+      "מאפים",
+      "פיצה"
+    ],
+    "ingredients": "לבצק: 2 ק\"ג קמח, 1 ליטר מים פושרים, 1 כף מלח, 1 כף סוכר, 150 מ\"ל שמן, 5 כפות שמרים.\nלרוטב ולציפוי: 2 קופסאות עגבניות מרוסקות (800 גר' כל אחת), מלח, פלפל שחור, אורגנו, 1200 גר' גבינה צהובה.",
+    "instructions": "לשיים בצק (מלח מוסיפים בסוף), מתפיחים לפחות שעה וחצי. מרדדים, מורחים רוטב עגבניות מתובל, מפזרים גבינה צהובה ואופים.",
+    "link": ""
+  },
+  {
+    "id": 28,
+    "title": "עוגת שוקולד כשרה לפסח",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי",
+      "עוגות",
+      "כשר לפסח"
+    ],
+    "ingredients": "3 ביצים, 200 גרם שוקולד מריר, 200 גרם חמאה (או 180 מ\"ל שמן לפרווה), 100 גרם סוכר (חצי כוס), 70 גרם קורנפלור/קמח (חצי כוס), מלח גס.",
+    "instructions": "ממיסים שוקולד וחמאה/שמן, מוסיפים סוכר, ומשקשקים פנימה בהדרגה את הביצים. מוסיפים קורנפלור. מעבירים לתבנית ואופים ב-180 מעלות כ-20 דקות. מצננים ומפזרים מלח גס מעל.",
+    "link": ""
+  },
+  {
+    "id": 29,
+    "title": "מלוחיה עם עוף",
+    "category": "בשרי",
+    "tags": [
+      "בשרי",
+      "עיקריות",
+      "מרקים"
+    ],
+    "ingredients": "עלי מלוחיה (מופשרים), חלקי עוף, תבלין חוואייג' למרק, 2 שיני שום, 1 כפית כוסברה טחונה, שמן.",
+    "instructions": "1. מרתיחים עוף למעבר קצף, מסננים ושוטפים.\n2. מחזירים לסיר עם מים נקיים עד חצי גובה, מוסיפים חוואייג' ומחממים.\n3. מטגנים שום וכוסברה במחבת.\n4. מדללים מלוחיה עם מעט מנוזלי המרק עד שאין גושים.\n5. מוסיפים את המלוחיה והשום המטוגן לסיר העוף. כשהסיר מתחיל לבעבע/לגלוש – מכבים.",
+    "link": ""
+  },
+  {
+    "id": 30,
+    "title": "רוטב הולנדייז",
+    "category": "חלבי",
+    "tags": [
+      "חלבי",
+      "רוטב"
+    ],
+    "ingredients": "4 חלמונים, 1 כף מיץ לימון, 120 גרם חמאה מומסת, מלח, פלפל שחור.",
+    "instructions": "שמים חלמונים ומיץ לימון בבן-מארי ומקציפים עד שהנפח מוכפל (להיזהר שלא יהפוך למקושקשת). מוסיפים חמאה מומסת בהדרגה תוך ערבוב לאיחוד. מתבלים במלח ופלפל.",
+    "link": ""
+  },
+  {
+    "id": 31,
+    "title": "ריזוטו שמנת ופטריות",
+    "category": "חלבי",
+    "tags": [
+      "חלבי",
+      "עיקריות"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://www.ronyohananov.com/post/%D7%A8%D7%99%D7%96%D7%95%D7%98%D7%95-%D7%A9%D7%9E%D7%A0%D7%AA-%D7%A4%D7%98%D7%A8%D7%99%D7%95%D7%AA-%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D-%D7%A4%D7%98%D7%A0%D7%98"
+  },
+  {
+    "id": 32,
+    "title": "בגט עם זיתים",
+    "category": "פרווה",
+    "tags": [
+      "פרווה",
+      "מאפים",
+      "לחם"
+    ],
+    "ingredients": "לפי המתכון שבסרטון",
+    "instructions": "לפי המתכון שבסרטון",
+    "link": "https://youtu.be/jmJkU3UCQZM?si=OXhAqm9sZdglLpKq"
+  },
+  {
+    "id": 33,
+    "title": "חלות לשבת (של קובי)",
+    "category": "פרווה",
+    "tags": [
+      "פרווה",
+      "מאפים",
+      "לחם",
+      "שבת"
+    ],
+    "ingredients": "1 ק\"ג קמח (ניתן להמיר בקמח פיצה/לחם), 2 כפות שמרים, 3-4 כפות סוכר, 2 כפות שמן, 0.5-1 כפית מלח, 2-2.5 כוסות מים, (אופציונלי: 1 ביצה).",
+    "instructions": "לשיים מכל המרכיבים בצק, מתפיחים, מעצבים צורת חלות (ישרות או עגולות), מתפיחים שנית ואופים.",
+    "link": "https://www.instagram.com/reel/C19pcSGiuRb/?igsh=NmtyOGoxcmZjYzFv"
+  },
+  {
+    "id": 34,
+    "title": "עוגת טריקולד 3 שכבות",
+    "category": "חלבי",
+    "tags": [
+      "קינוח",
+      "חלבי",
+      "עוגות",
+      "שוקולד"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור",
+    "link": "https://nikib.co.il/cakes-dessert/3414/"
+  },
+  {
+    "id": 35,
+    "title": "בצק פסטה ביתית",
+    "category": "פרווה",
+    "tags": [
+      "פרווה",
+      "פסטה"
+    ],
+    "ingredients": "100 גרם קמח דורום סמולינה (לכל מנה/אדם), 1 ביצה שלמה, מעט מלח.",
+    "instructions": "מלושים יחד את המרכיבים לבצק קשה, עוטפים בניילון נצמד ומכניסים למקרר לשעה לפחות. מרדדים במכונת פסטה ויוצרים את הצורה הרצויה.",
+    "link": ""
+  },
+  {
+    "id": 36,
+    "title": "לחמניות המבורגר",
+    "category": "פרווה",
+    "tags": [
+      "פרווה",
+      "מאפים",
+      "לחם"
+    ],
+    "ingredients": "לפי המתכון שבקישור",
+    "instructions": "לפי המתכון שבקישור (הערה: מתפיחים שעה וחצי, אפשר להקפיא לאחר אפייה).",
+    "link": "https://kerenagam.co.il/%D7%9C%D7%97%D7%9E%D7%A0%D7%99%D7%95%D7%AA-%D7%94%D7%9E%D7%91%D7%95%D7%A8%D7%92%D7%A8/"
+  },
+  {
+    "id": 37,
+    "title": "קציצות בשר ברוטב עגבניות ותפוחי אדמה",
+    "category": "בשרי",
+    "tags": [
+      "בשרי",
+      "עיקריות",
+      "קציצות"
+    ],
+    "ingredients": "לקציצות: 1 ק\"ג בשר טחון, 3 כפות פירורי לחם, 1 ביצה, מעט סודה לשתייה, 2 כפיות שום כתוש, 1 כפית מלח, 0.5 כפית פלפל שחור, 1 כפית פפריקה, תבלין לקציצות/גריל עוף.\nלרוטב: שמן, 1 כפית שום כתוש, 1 כפית פפריקה, מלח, פלפל, 2-3 קופסאות רסק עגבניות, מעט עגבניות מגורדות, 2-3 כפות סילאן, 2-3 תפוחי אדמה בקוביות.",
+    "instructions": "מכינים את הרוטב בסיר, מעצבים את הקציצות ומסדרים אותן בתוך הרוטב המבעבע יחד עם תפוחי האדמה עד לבישול מלא.",
+    "link": ""
+  },
+  {
+    "id": 38,
+    "title": "עוגת גזר ואגוזים",
+    "category": "פרווה",
+    "tags": [
+      "קינוח",
+      "פרווה",
+      "עוגות"
+    ],
+    "ingredients": "3 גזרים גדולים קלופים ומגוררים, 100 גרם אגוזי מלך שבורים, 3/4 כוס שמן, 3/4 כוס סוכר, 2 ביצים L, 1.25 כוסות קמח תופח, 1 כף קינמון, 1 כפית סודה לשתייה, 1 כפית מלח.",
+    "instructions": "מערבבים שמן, ביצים וסוכר. בקערה נפרדת מערבבים גזר, אגוזים, קמח, קינמון, סודה לשתייה ומלח. מאחדים את הרטובים והיבשים רק עד אחידות. יוצקים לתבנית משומנת ואופים ב-180 מעלות כ-20-30 דקות.",
+    "link": ""
+  },
+  {
+    "id": 39,
+    "title": "ריבת פירות של סבתא ויקי",
+    "category": "פרווה",
+    "tags": [
+      "פרווה",
+      "מתוקים"
+    ],
+    "ingredients": "2 ק\"ג פרי (משמש, תות, חושחש וכדומה), 1 ק\"ג סוכר.",
+    "instructions": "מבשלים בסיר ללא מכסה על אש נמוכה כ-30 דקות עד שהריבה מוכנה. יוצקים לצנצנות זכוכית בעודה חמה (לא רותחת), פותחים וסוגרים מעט את המכסה להוצאת אוויר.",
+    "link": ""
+  },
+  {
+    "id": 40,
+    "title": "תבשיל כתף בקר ביין אדום (כתף מס' 5)",
+    "category": "בשרי",
+    "tags": [
+      "בשרי",
+      "עיקריות",
+      "בקר"
+    ],
+    "ingredients": "נתח כתף מס' 5 (חתוך לקוביות גדולות), 1-2 בקבוקי ייין אדום יבש, בצל, סלרי, גזר, שום, טימין, מרווה, רוזמרין, ציפורן, אגוז מוסקט, 1 כף רסק עגבניות, 1.5 כפית קמח/קורנפלור, מעט ברנדי/וויסקי/פורט, שמן, מלח, פלפל.",
+    "instructions": "1. מצמצמים יין לחצי כמות.\n2. מתבלים בשר במלח פלפל ומטגנים בשמן בסיר. מוציאים את הבשר.\n3. מטגנים בסיר בצל, סלרי, גזר, שום ותבלינים. מוסיפים רסק וקמח ומטגנים קלות.\n4. מוסיפים אלכוהול ומצמצמים. מחזירים בשר, מוסיפים את היין המצומצם ומים עד כיסוי.\n5. מכסים בנייר כסף ואופים בתנור (150 מעלות ל-3 שעות או 130 מעלות ל-5 שעות).\n6. מסננים את הרוטב ומצמצמים אותו כ-45-50 דקות, מחזירים את הבשר לחימום ברוטב.",
+    "link": ""
+  },
+  {
+    "id": 41,
+    "title": "טבית (חמין עיראקי עם עוף ואורז)",
+    "category": "בשרי",
+    "tags": [
+      "בשרי",
+      "עיקריות",
+      "חמין"
+    ],
+    "ingredients": "עוף שלם/חלקי עוף, 2 בצלים קצוצים, 6 עגבניות קצוצות, 4-6 שיני שום, 2 כפיות כמון, 1 כפית כורכום, 1 כפית פפריקה, 1 כפית קינמון, 2 יח' ציפורן, 1 כף רסק עגבניות, 4 כוסות אורז (מושרה), 1 כף מלח, מים רותחים.",
+    "instructions": "1. מטגנים בצל בסיר עד מזהיב. מוסיפים עגבניות, שום, תבלינים ורסק עגבניות.\n2. מוסיפים את העוף ומכסים במים רותחים. מבשלים 40 דקות.\n3. מוסיפים את האורז והמלח, מנמיכים להבה ומבשלים על אש נמוכה תוך ערבוב מדי פעם.",
+    "link": ""
+  },
+  {
+    "id": 42,
+    "title": "קציצות עוף בריאות",
+    "category": "בשרי",
+    "tags": [
+      "בשרי",
+      "עיקריות",
+      "קציצות"
+    ],
+    "ingredients": "לפי המתכון שבסרטון",
+    "instructions": "לפי המתכון שבסרטון",
+    "link": "https://www.instagram.com/reel/DKrFCH8oojm/?igsh=MWQxc3d1ZzZzMG5zdA=="
+  },
+  {
+    "id": 43,
+    "title": "ממרח כבד עוף",
+    "category": "בשרי",
+    "tags": [
+      "בשרי",
+      "ממרחים"
+    ],
+    "ingredients": "כבדי עוף, בצל, מלח, פלפל שחור, מעט נוזלי טיגון/מים.",
+    "instructions": "מטגנים בצל במחבת עד שהופך לשקוף, מוסיפים את הכבדים, מלח ופלפל ומטגנים עד בישול. טוחנים בבלנדר/מעבד מזון ומוסיפים מעט נוזלים לפי הצורך לקבלת מרקם חלק.",
+    "link": ""
+  },
+  {
+    "id": 44,
+    "title": "עוגת שוקולד לילדים (קלה לכלים/גן)",
+    "category": "פרווה",
+    "tags": [
+      "קינוח",
+      "פרווה",
+      "עוגות"
+    ],
+    "ingredients": "לעוגה: 2 ביצים L (או 3 M), 1 כוס סוכר, 1 כוס שמן, 1 כוס מים פושרים, 3/4 כוס מים חמים, 2 כוסות קמח, 1 שקית אבקת אפייה, 1 כפית סודה לשתייה, 4 כפות קקאו.\nלציפוי: 100 גר' שוקולד מריר, 2 כפיות חמאה/חלב/מים, סוכריות צבעוניות.",
+    "instructions": "מקציפים ביצים וסוכר. מוסיפים בהדרגה שמן ומים. מוסיפים יבשים (קמח, אבקת אפייה, סודה לשתייה, קקאו) ומערבבים לאחידות. אופים ב-180 מעלות כ-40-50 דקות. ממיסים שוקולד לציפוי, מורחים ומפזרים סוכריות.",
+    "link": ""
+  },
+  {
+    "id": 45,
+    "title": "עלי גפן וגמבות ממולאים בעוף טחון ואורז",
+    "category": "בשרי",
+    "tags": [
+      "בשרי",
+      "עיקריות",
+      "ממולאים"
+    ],
+    "ingredients": "לבסיס: עלי גפן, גמבות, 3-4 בצלים בפרוסות עבות, שמן זית.\nלמילוי: 1 ק\"ג עוף טחון, 2 כוסות אורז עגול, 2 בצלים קצוצים, 1 כוס פטרוזיליה, שמיר/נענע, 4 כפות שמן זית, בהרט, מלח, פלפל, כורכום.\nלרוטב: 4 כפות רסק עגבניות, 4 כוסות מים רותחים, מיץ מ-2 לימונים, 6 כפות שמן זית, 2 כפיות סוכר, מלח, פלפל.",
+    "instructions": "1. חולטים עלי גפן במים רותחים 30-60 שניות.\n2. מערבבים חומרי מילוי. מגלגלים עלי גפן וממלאים גמבות.\n3. מרפדים תחתית סיר בפרוסות בצל, מסדרים מעל את עלי הגפן והגמבות בצפיפות.\n4. יוצקים את הרוטב, מניחים צלחת כמשקולת מעל, מביאים לרתיחה ומבשלים על אש קטנה 1.5–2 שעות.",
+    "link": ""
+  },
+  {
+    "id": 46,
+    "title": "לחם שיפון וחיטה ביתי (מתאים לסוכרתיים)",
+    "category": "פרווה",
+    "tags": [
+      "פרווה",
+      "מאפים",
+      "לחם",
+      "בריאות"
+    ],
+    "ingredients": "290 מ\"ל מים, 3 כפות שמן זית, 1 כפית חומץ, 1 כפית מלח, 200 גר' קמח שיפון מלא, 250 גר' קמח חיטה לבן, 2 כפות זרעי פשתן/צ'יה/אגוזים, 1.5 כפיות שמרים יבשים.",
+    "instructions": "מכניסים לאופה לחם / לשיים בצק לפי סדר הרכיבים, מתפיחים ואופים.",
+    "link": ""
+  }
+];
+
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let favorites = JSON.parse(localStorage.getItem('recipe_favorites') || '[]');
+
+        const recipesContainer = document.getElementById('recipesContainer');
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const recipeCount = document.getElementById('recipeCount');
+
+        function init() {
+            renderRecipes();
+            setupEventListeners();
+        }
+
+        function setupEventListeners() {
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.trim().toLowerCase();
+                renderRecipes();
+            });
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = btn.dataset.category;
+                    renderRecipes();
+                });
+            });
+        }
+
+        function toggleFavorite(id) {
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(favId => favId !== id);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('recipe_favorites', JSON.stringify(favorites));
+            renderRecipes();
+        }
+
+        function filterRecipes() {
+            return recipesData.filter(recipe => {
+                // Category Filter
+                if (currentCategory === 'favorites') {
+                    if (!favorites.includes(recipe.id)) return false;
+                } else if (currentCategory !== 'all' && recipe.category !== currentCategory) {
+                    return false;
+                }
+
+                // Search Query Filter
+                if (searchQuery) {
+                    const matchTitle = recipe.title.toLowerCase().includes(searchQuery);
+                    const matchIngredients = recipe.ingredients.toLowerCase().includes(searchQuery);
+                    const matchInstructions = recipe.instructions.toLowerCase().includes(searchQuery);
+                    const matchTags = recipe.tags.some(t => t.toLowerCase().includes(searchQuery));
+                    
+                    return matchTitle || matchIngredients || matchInstructions || matchTags;
+                }
+
+                return true;
+            });
+        }
+
+        function renderRecipes() {
+            const filtered = filterRecipes();
+            recipesContainer.innerHTML = '';
+
+            recipeCount.textContent = `מציג ${filtered.length} מתוך ${recipesData.length} מתכונים`;
+
+            if (filtered.length === 0) {
+                recipesContainer.innerHTML = `
+                    <div class="no-results">
+                        <p>🚫 לא נמצאו מתכונים המתאימים לחיפוש שלך.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(recipe => {
+                const isFav = favorites.includes(recipe.id);
+                const card = document.createElement('div');
+                card.className = `recipe-card category-${recipe.category}`;
+
+                let tagsHtml = recipe.tags.map(t => `<span class="tag">#${t}</span>`).join('');
+                
+                let linkHtml = recipe.link 
+                    ? `<a href="${recipe.link}" target="_blank" rel="noopener noreferrer" class="btn-link">🔗 למתכון המלא</a>`
+                    : `<span style="font-size:0.8rem; color:#8d99ae;">מתכון מלא בכרטיסיה</span>`;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="card-header">
+                            <h2 class="recipe-title">${recipe.title}</h2>
+                            <span class="badge ${recipe.category}">${recipe.category}</span>
+                        </div>
+                        
+                        <div class="tags-list">
+                            ${tagsHtml}
+                        </div>
+
+                        ${recipe.ingredients !== 'לפי המתכון שבקישור' ? `
+                            <div class="recipe-section">
+                                <div class="section-title">🛒 מצרכים:</div>
+                                <div class="section-content">${recipe.ingredients}</div>
+                            </div>
+                        ` : ''}
+
+                        ${recipe.instructions !== 'לפי המתכון שבקישור' ? `
+                            <div class="recipe-section">
+                                <div class="section-title">👩‍🍳 הוראות הכנה:</div>
+                                <div class="section-content">${recipe.instructions}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="card-footer">
+                        ${linkHtml}
+                        <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite(${recipe.id})" title="שמור במועדפים">
+                            ${isFav ? '★' : '☆'}
+                        </button>
+                    </div>
+                `;
+
+                recipesContainer.appendChild(card);
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>
