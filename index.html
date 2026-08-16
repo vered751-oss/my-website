@@ -6,244 +6,571 @@
   <title>ספר המתכונים שלי</title>
   <style>
     /* ==========================================
-       איפוס והגדרות יסוד לתצוגה בנייד ובמחשב
+       ערכת נושא ועיצוב כללי (Light Blue UX)
        ========================================== */
+    :root {
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-light: #e0f2fe;
+      --bg-color: #f0f9ff;
+      --card-bg: #ffffff;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --favorite: #f43f5e;
+      --border-radius: 16px;
+      --shadow: 0 4px 20px -2px rgba(2, 132, 199, 0.1);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-    }
-
-    html, body {
-      max-width: 100%;
-      overflow-x: hidden;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: #f8f9fa;
-      color: #333333;
-      line-height: 1.6;
     }
 
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      line-height: 1.5;
+      padding-bottom: 40px;
+    }
+
+    /* ==========================================
+       סרגל ניווט עליון
+       ========================================== */
     header {
-      background-color: #ffffff;
-      text-align: center;
-      padding: 20px 16px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      margin-bottom: 20px;
+      background: var(--card-bg);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      border-bottom: 2px solid var(--primary-light);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
       gap: 12px;
     }
 
-    h1 {
-      font-size: 2rem;
-      color: #2c3e50;
-    }
-
-    /* עיצוב כפתור חזרה לדף הבית */
-    .home-btn {
-      display: inline-flex;
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
       align-items: center;
       gap: 8px;
-      background-color: #2c3e50;
-      color: #ffffff;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 20px;
-      font-size: 0.95rem;
-      font-weight: bold;
-      transition: background-color 0.2s ease, transform 0.1s ease;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-      border: none;
-      cursor: pointer;
     }
 
-    .home-btn:hover {
-      background-color: #1a252f;
-    }
-
-    .home-btn:active {
-      transform: scale(0.98);
-    }
-
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 16px 32px 16px;
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
     }
 
     /* ==========================================
-       רשת כרטיסיות מתכונים גמישה (Grid)
+       כפתורים ופקדים
        ========================================== */
-    .recipes-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      width: 100%;
+    .btn {
+      padding: 10px 18px;
+      border-radius: 25px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    /* עיצוב כרטיסיית מתכון */
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-outline {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: #bae6fd;
+    }
+
+    .btn-danger {
+      background-color: #fef2f2;
+      color: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background-color: #fee2e2;
+    }
+
+    .btn-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      padding: 0;
+      justify-content: center;
+      background: var(--primary-light);
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .btn-icon:active {
+      transform: scale(0.9);
+    }
+
+    /* ==========================================
+       סרגל חיפוש וסינון
+       ========================================== */
+    .controls-section {
+      max-width: 1100px;
+      margin: 24px auto;
+      padding: 0 16px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .search-bar {
+      flex: 1;
+      min-width: 240px;
+      padding: 12px 20px;
+      border-radius: 25px;
+      border: 2px solid var(--primary-light);
+      outline: none;
+      font-size: 1rem;
+      background: white;
+    }
+
+    .search-bar:focus {
+      border-color: var(--primary);
+    }
+
+    /* ==========================================
+       רשת כרטיסיות המתכונים (Grid)
+       ========================================== */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .recipes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
     .recipe-card {
-      background: #ffffff;
-      border-radius: 12px;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--primary-light);
       display: flex;
       flex-direction: column;
+      position: relative;
+      transition: transform 0.2s ease;
     }
 
-    .recipe-image {
+    .recipe-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card-image {
       width: 100%;
-      height: 200px;
+      height: 190px;
       object-fit: cover;
     }
 
-    .recipe-content {
-      padding: 16px;
+    .card-fav-btn {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .card-content {
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      flex-grow: 1;
+      flex: 1;
     }
 
-    .recipe-title {
-      font-size: 1.4rem;
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
       margin-bottom: 8px;
-      color: #2c3e50;
     }
 
-    .recipe-description {
+    .card-meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .card-body {
       font-size: 0.95rem;
-      color: #666666;
+      color: #334155;
+      margin-bottom: 16px;
+      white-space: pre-line;
+      flex: 1;
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid var(--primary-light);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+      grid-column: 1 / -1;
+    }
+
+    /* ==========================================
+       חלון מודאלי להוספה ועריכה
+       ========================================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      background: white;
+      border-radius: var(--border-radius);
+      width: 100%;
+      max-width: 500px;
+      padding: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
       margin-bottom: 16px;
     }
 
-    /* ==========================================
-       טבלאות ורשימות מותאמות לטלפון
-       ========================================== */
-    .table-wrapper {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      margin-top: 12px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: right;
-    }
-
-    th, td {
-      padding: 8px 12px;
-      border-bottom: 1px solid #eeeeee;
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
       font-size: 0.9rem;
     }
 
-    th {
-      background-color: #f1f3f5;
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 0.95rem;
+      outline: none;
     }
 
-    /* ==========================================
-       התאמות ייעודיות למסכי טלפון קטנים
-       ========================================== */
-    @media screen and (max-width: 600px) {
-      header {
-        padding: 16px 12px;
-      }
+    .form-control:focus {
+      border-color: var(--primary);
+    }
 
-      h1 {
-        font-size: 1.5rem;
-      }
+    textarea.form-control {
+      resize: vertical;
+      min-height: 80px;
+    }
 
-      .recipes-container {
+    /* Responsive Adjustments */
+    @media (max-width: 600px) {
+      .nav-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .nav-actions {
+        justify-content: space-between;
+      }
+      .recipes-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
-      }
-
-      .recipe-image {
-        height: 180px;
-      }
-
-      .recipe-title {
-        font-size: 1.25rem;
       }
     }
   </style>
 </head>
 <body>
 
+  <!-- סרגל ניווט -->
   <header>
-    <h1>ספר המתכונים שלי</h1>
-    <a href="index.html" class="home-btn" onclick="window.location.href='index.html'; return false;">
-      &#8962; חזרה לדף הבית
-    </a>
+    <div class="nav-container">
+      <div class="logo">
+        <span>🥣</span> ספר המתכונים
+      </div>
+      <div class="nav-actions">
+        <button class="btn btn-outline" onclick="showHome()">🏠 דף הבית</button>
+        <button class="btn btn-outline" onclick="filterFavorites()">❤️ מועדפים</button>
+        <button class="btn btn-primary" onclick="openModal()">➕ מתכון חדש</button>
+      </div>
+    </div>
   </header>
 
+  <!-- סרגל חיפוש -->
+  <section class="controls-section">
+    <input type="text" id="searchInput" class="search-bar" placeholder="חפש מתכון לפי שם או רכיב..." oninput="renderRecipes()">
+  </section>
+
+  <!-- אזור הצגת המתכונים -->
   <main>
-    <div class="recipes-container">
-      
-      <!-- כרטיסיית מתכון לדוגמה 1 -->
-      <article class="recipe-card">
-        <img class="recipe-image" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600" alt="סלט רענן">
-        <div class="recipe-content">
-          <h2 class="recipe-title">סלט ירוק רענן</h2>
-          <p class="recipe-description">סלט מזין וקליל שמתאים לצד כל ארוחה.</p>
-          
-          <div class="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>רכיב</th>
-                  <th>כמות</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>עלי חסה</td>
-                  <td>1 חבילה</td>
-                </tr>
-                <tr>
-                  <td>רוטב לימון ושמן זית</td>
-                  <td>2 כפות</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </article>
-
-      <!-- כרטיסיית מתכון לדוגמה 2 -->
-      <article class="recipe-card">
-        <img class="recipe-image" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600" alt="פיצה ביתית">
-        <div class="recipe-content">
-          <h2 class="recipe-title">פיצה ביתית מהירה</h2>
-          <p class="recipe-description">מתכון פשוט להכנת פיצה איטלקית בתנור הביתי.</p>
-          
-          <div class="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>רכיב</th>
-                  <th>כמות</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>קמח</td>
-                  <td>500 גרם</td>
-                </tr>
-                <tr>
-                  <td>גבינת מוצרלה</td>
-                  <td>200 גרם</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </article>
-
-    </div>
+    <div id="recipesGrid" class="recipes-grid"></div>
   </main>
 
+  <!-- טופס מודאלי להוספה / עריכה -->
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">הוספת מתכון חדש</h2>
+        <button class="btn-icon" onclick="closeModal()">✕</button>
+      </div>
+      <form id="recipeForm" onsubmit="saveRecipe(event)">
+        <input type="hidden" id="recipeId">
+        
+        <div class="form-group">
+          <label>שם המתכון</label>
+          <input type="text" id="titleInput" class="form-control" required placeholder="למשל: עוגת שוקולד נימוחה">
+        </div>
+
+        <div class="form-group">
+          <label>זמן הכנה (דקות)</label>
+          <input type="number" id="timeInput" class="form-control" placeholder="30">
+        </div>
+
+        <div class="form-group">
+          <label>קישור לתמונה (URL)</label>
+          <input type="url" id="imageInput" class="form-control" placeholder="https://example.com/image.jpg">
+        </div>
+
+        <div class="form-group">
+          <label>מצרכים ושלבי הכנה</label>
+          <textarea id="contentInput" class="form-control" required placeholder="רשום את המצרכים ואופן ההכנה..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">ביטול</button>
+          <button type="submit" class="btn btn-primary">שמירה</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // ניהול נתונים (LocalStorage)
+    // ==========================================
+    const defaultRecipes = [
+      {
+        id: '1',
+        title: 'סלט ירוק רענן',
+        time: '15',
+        image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600',
+        content: 'עלי חסה, מלפפון, שמן זית, לימון ומלח.\nמערבבים הכל בקערה ומגישים טרי.',
+        favorite: true
+      },
+      {
+        id: '2',
+        title: 'פיצה ביתית מהירה',
+        time: '30',
+        image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600',
+        content: '500 גרם קמח, שמרים, רוטב עגבניות וגבינת מוצרלה.\nאופים ב-220 מעלות כ-15 דקות.',
+        favorite: false
+      }
+    ];
+
+    let recipes = JSON.parse(localStorage.getItem('my_recipes')) || defaultRecipes;
+    let currentFilter = 'all';
+
+    function saveToStorage() {
+      localStorage.setItem('my_recipes', JSON.stringify(recipes));
+    }
+
+    // ==========================================
+    // רינדור התצוגה
+    // ==========================================
+    function renderRecipes() {
+      const grid = document.getElementById('recipesGrid');
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      grid.innerHTML = '';
+
+      let filtered = recipes.filter(r => {
+        const matchesSearch = r.title.toLowerCase().includes(searchTerm) || r.content.toLowerCase().includes(searchTerm);
+        const matchesFav = currentFilter === 'favorites' ? r.favorite : true;
+        return matchesSearch && matchesFav;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="empty-state"><h3>לא נמצאו מתכונים matching.</h3><p>נסה לחפש משהו אחר או להוסיף מתכון חדש!</p></div>`;
+        return;
+      }
+
+      filtered.forEach(recipe => {
+        const card = document.createElement('div');
+        card.className = 'recipe-card';
+        card.innerHTML = `
+          <button class="card-fav-btn" onclick="toggleFavorite('${recipe.id}')">
+            ${recipe.favorite ? '❤️' : '🤍'}
+          </button>
+          <img class="card-image" src="${recipe.image || 'https://via.placeholder.com/400x200?text=אין+תמונה'}" alt="${recipe.title}">
+          <div class="card-content">
+            <h3 class="card-title">${recipe.title}</h3>
+            <div class="card-meta">
+              <span>⏱️ ${recipe.time || '15'} דקות</span>
+            </div>
+            <div class="card-body">${recipe.content}</div>
+            <div class="card-actions">
+              <button class="btn btn-outline" onclick="editRecipe('${recipe.id}')">✏️ עריכה</button>
+              <button class="btn btn-danger" onclick="deleteRecipe('${recipe.id}')">🗑️ מחיקה</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // ==========================================
+    // פונקציות ניווט וסינון
+    // ==========================================
+    function showHome() {
+      currentFilter = 'all';
+      document.getElementById('searchInput').value = '';
+      renderRecipes();
+    }
+
+    function filterFavorites() {
+      currentFilter = 'favorites';
+      renderRecipes();
+    }
+
+    function toggleFavorite(id) {
+      recipes = recipes.map(r => r.id === id ? {...r, favorite: !r.favorite} : r);
+      saveToStorage();
+      renderRecipes();
+    }
+
+    function deleteRecipe(id) {
+      if (confirm('האם אתה בטוח שברצונך למחוק מתכון זה?')) {
+        recipes = recipes.filter(r => r.id !== id);
+        saveToStorage();
+        renderRecipes();
+      }
+    }
+
+    // ==========================================
+    // ניהול המודאל (הוספה/עריכה)
+    // ==========================================
+    function openModal() {
+      document.getElementById('recipeForm').reset();
+      document.getElementById('recipeId').value = '';
+      document.getElementById('modalTitle').innerText = 'הוספת מתכון חדש';
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    function editRecipe(id) {
+      const recipe = recipes.find(r => r.id === id);
+      if (!recipe) return;
+
+      document.getElementById('recipeId').value = recipe.id;
+      document.getElementById('titleInput').value = recipe.title;
+      document.getElementById('timeInput').value = recipe.time || '';
+      document.getElementById('imageInput').value = recipe.image || '';
+      document.getElementById('contentInput').value = recipe.content;
+
+      document.getElementById('modalTitle').innerText = 'עריכת מתכון';
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function saveRecipe(event) {
+      event.preventDefault();
+
+      const id = document.getElementById('recipeId').value;
+      const title = document.getElementById('titleInput').value;
+      const time = document.getElementById('timeInput').value;
+      const image = document.getElementById('imageInput').value;
+      const content = document.getElementById('contentInput').value;
+
+      if (id) {
+        // עריכת מתכון קיים
+        recipes = recipes.map(r => r.id === id ? {...r, title, time, image, content} : r);
+      } else {
+        // הוספת מתכון חדש
+        const newRecipe = {
+          id: Date.now().toString(),
+          title,
+          time,
+          image,
+          content,
+          favorite: false
+        };
+        recipes.unshift(newRecipe);
+      }
+
+      saveToStorage();
+      closeModal();
+      renderRecipes();
+    }
+
+    // טעינה ראשונית
+    renderRecipes();
+  </script>
 </body>
 </html>
