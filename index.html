@@ -2,297 +2,1484 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>אפליקציית המתכונים - 54 מתכונים</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ספר המתכונים שלי</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --bg: #f8fafc;
+            --primary: #0284c7;
+            --primary-hover: #0369a1;
+            --primary-light: #e0f2fe;
+            --accent: #38bdf8;
+            --bg-body: #f0f9ff;
             --card-bg: #ffffff;
-            --text: #0f172a;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --border: #e2e8f0;
-            --radius: 16px;
+            --border-color: #bae6fd;
+            --shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
+            --shadow-hover: 0 8px 20px rgba(2, 132, 199, 0.15);
+            
+            --easy-bg: #dcfce7;
+            --easy-text: #166534;
+            --medium-bg: #fef3c7;
+            --medium-text: #92400e;
+            --hard-bg: #ffe4e6;
+            --hard-text: #9f1239;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Rubik', sans-serif;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            padding: 12px;
-            max-width: 1200px;
-            margin: 0 auto;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding-bottom: 80px;
         }
 
+        /* Header */
         header {
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            color: white;
+            padding: 20px 16px;
             text-align: center;
-            padding: 16px 0 8px;
-        }
-
-        h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-        }
-
-        /* סרגל חיפוש וסינון דביק בראש המסך */
-        .sticky-controls {
             position: sticky;
             top: 0;
-            background-color: var(--bg);
-            padding: 8px 0;
-            z-index: 50;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Sticky Control Bar */
+        .controls-container {
+            background: white;
+            padding: 12px 16px;
+            position: sticky;
+            top: 68px;
+            z-index: 90;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .search-box {
+            position: relative;
             width: 100%;
-            padding: 14px 16px;
-            font-size: 1rem;
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 40px 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            font-size: 0.95rem;
             outline: none;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            background: #fff;
+            transition: all 0.2s;
+            background-color: #f8fafc;
         }
 
-        .search-box:focus {
+        .search-box input:focus {
             border-color: var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
         }
 
-        .categories {
+        .search-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            fill: var(--text-muted);
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Category Filter Tags */
+        .categories-scroll {
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding: 10px 0 4px;
+            padding-bottom: 4px;
             scrollbar-width: none;
         }
-
-        .categories::-webkit-scrollbar {
+        .categories-scroll::-webkit-scrollbar {
             display: none;
         }
 
         .cat-btn {
-            background: #fff;
-            border: 1px solid var(--border);
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
             padding: 8px 16px;
             border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
             white-space: nowrap;
-            font-size: 0.9rem;
+            color: var(--text-main);
             cursor: pointer;
-            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .cat-btn.active {
-            background-color: var(--primary);
+            background: var(--primary);
             color: white;
             border-color: var(--primary);
         }
 
-        .counter {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin: 12px 4px;
-            font-weight: 500;
+        .add-btn-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 16px 0 16px;
         }
 
-        /* גריד גמיש: טור 1 בטלפון, 2-4 בטאבלט ומחשב */
-        .grid {
+        .btn-add {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-add:active {
+            transform: scale(0.98);
+        }
+
+        /* Main Content & Section Headers */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .section-header {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary-hover);
+            margin: 20px 0 12px 0;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-header:first-of-type {
+            margin-top: 10px;
+        }
+
+        .recipes-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 12px;
+            gap: 16px;
         }
 
-        @media (min-width: 640px) {
-            .grid { grid-template-columns: repeat(2, 1fr); }
+        @media (min-width: 600px) {
+            .recipes-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
-        @media (min-width: 1024px) {
-            .grid { grid-template-columns: repeat(3, 1fr); }
-        }
-
+        /* Card Styles */
         .card {
             background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
+            border-radius: 16px;
             padding: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid #e0f2fe;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .card-top {
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 700;
+            color: var(--text-main);
             line-height: 1.3;
         }
 
-        .tag {
-            background-color: #eff6ff;
-            color: var(--primary);
-            font-size: 0.75rem;
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-weight: 500;
-            white-space: nowrap;
+        .fav-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .btn-link {
-            display: block;
+        .fav-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #cbd5e1;
+            transition: fill 0.2s, transform 0.2s;
+        }
+
+        .fav-btn.active svg {
+            fill: #ef4444;
+            transform: scale(1.1);
+        }
+
+        .badges-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .badge-cat {
+            background-color: var(--primary-light);
+            color: var(--primary-hover);
+        }
+
+        .badge-easy { background-color: var(--easy-bg); color: var(--easy-text); }
+        .badge-medium { background-color: var(--medium-bg); color: var(--medium-text); }
+        .badge-hard { background-color: var(--hard-bg); color: var(--hard-text); }
+
+        .fav-tag {
+            font-size: 0.75rem;
+            background: #fff1f2;
+            color: #e11d48;
+            border: 1px solid #fecdd3;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .content-block {
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            color: #334155;
+        }
+
+        .content-block h4 {
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-top: 8px;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .content-block p {
+            white-space: pre-line;
+            line-height: 1.4;
+        }
+
+        .external-link-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background-color: #f0f9ff;
+            color: var(--primary);
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            transition: all 0.2s;
+            width: 100%;
             text-align: center;
+        }
+
+        .external-link-btn:hover {
             background-color: var(--primary);
             color: white;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 12px;
-            font-weight: 500;
-            margin-top: 12px;
         }
 
-        .btn-link:active {
-            background-color: var(--primary-hover);
+        .card-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px dashed #e2e8f0;
         }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-icon:hover {
+            background-color: #f1f5f9;
+            color: var(--text-main);
+        }
+
+        .btn-icon.delete:hover {
+            background-color: #ffe4e6;
+            color: #e11d48;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        /* Floating Back To Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 99;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Modal / Dialog */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+            padding: 16px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-header h3 {
+            font-size: 1.2rem;
+            color: var(--primary-hover);
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-main);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: #e2e8f0; color: var(--text-main); }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🍳 ספר המתכונים (54)</h1>
+        <h1>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 13.87A8 8 0 0 1 12 4a8 8 0 0 1 6 9.87M4 17h16M12 20v-3"/></svg>
+            ספר המתכונים שלי
+        </h1>
     </header>
 
-    <div class="sticky-controls">
-        <input type="text" id="searchInput" class="search-box" placeholder="חפש מתכון או קטגוריה...">
-        <div class="categories">
-            <button class="cat-btn active" onclick="setFilter('הכל')">הכל</button>
-            <button class="cat-btn" onclick="setFilter('עיקריות')">עיקריות</button>
-            <button class="cat-btn" onclick="setFilter('תוספות')">תוספות</button>
-            <button class="cat-btn" onclick="setFilter('מאפים')">מאפים</button>
-            <button class="cat-btn" onclick="setFilter('קינוחים')">קינוחים</button>
-            <button class="cat-btn" onclick="setFilter('סלטים')">סלטים</button>
+    <div class="controls-container">
+        <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <input type="text" id="searchInput" placeholder="חפש מתכון או רכיב (למשל: חמאה, עוף)..." oninput="handleSearch()">
+        </div>
+
+        <div class="categories-scroll" id="categoryContainer">
+            </div>
+    </div>
+
+    <div class="add-btn-wrapper">
+        <button class="btn-add" onclick="openRecipeModal()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            הוסף מתכון חדש
+        </button>
+    </div>
+
+    <main id="mainContainer">
+        <div id="fullRecipesSection">
+            <div class="section-header">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                מתכונים מלאים
+            </div>
+            <div class="recipes-grid" id="fullRecipesGrid"></div>
+        </div>
+
+        <div id="linkRecipesSection">
+            <div class="section-header" style="margin-top: 30px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                מתכונים לצפייה בקישור
+            </div>
+            <div class="recipes-grid" id="linkRecipesGrid"></div>
+        </div>
+
+        <div id="emptyState" class="empty-state" style="display: none;">
+            לא נמצאו מתכונים המתאימים לחיפוש/סינון נבחר.
+        </div>
+    </main>
+
+    <button class="back-to-top" id="backToTopBtn" onclick="scrollToTop()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    </button>
+
+    <div class="modal-overlay" id="favModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>סימון מתכון כמועדף</h3>
+            </div>
+            <div class="form-group">
+                <label>מי בחר/ה את המתכון הזה?</label>
+                <input type="text" id="favNameInput" placeholder="הכנס שם (למשל: דני, אמא, דנה)...">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeFavModal()">ביטול</button>
+                <button class="btn btn-primary" onclick="saveFavoriteName()">שמירה</button>
+            </div>
         </div>
     </div>
 
-    <div class="counter" id="counter">מציג 54 מתוך 54 מתכונים</div>
-    <div class="grid" id="recipeGrid"></div>
+    <div class="modal-overlay" id="recipeModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modalTitle">הוספת מתכון חדש</h3>
+                <button class="btn-icon" onclick="closeRecipeModal()">✕</button>
+            </div>
+            <form id="recipeForm" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="editRecipeId">
+                <div class="form-group">
+                    <label>שם המתכון *</label>
+                    <input type="text" id="inputTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>סוג מתכון</label>
+                    <select id="inputType" onchange="toggleFormFields()">
+                        <option value="full">מתכון מלא (מצרכים והוראות)</option>
+                        <option value="link">קישור בלבד</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>קטגוריה</label>
+                    <select id="inputCategory">
+                        <option value="מנות עיקריות">מנות עיקריות</option>
+                        <option value="אפייה">אפייה</option>
+                        <option value="קינוחים">קינוחים</option>
+                        <option value="תוספות ורטבים">תוספות ורטבים</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>דרגת קושי</label>
+                    <select id="inputDifficulty">
+                        <option value="קל">קל</option>
+                        <option value="בינוני">בינוני</option>
+                        <option value="קשה">קשה</option>
+                    </select>
+                </div>
+                <div class="form-group" id="groupIngredients">
+                    <label>מצרכים</label>
+                    <textarea id="inputIngredients" placeholder="למשל: 1 קג קמח, 2 ביצים..."></textarea>
+                </div>
+                <div class="form-group" id="groupInstructions">
+                    <label>הוראות הכנה</label>
+                    <textarea id="inputInstructions" placeholder="שלבי ההכנה..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>קישור חיצוני (אופציונלי)</label>
+                    <input type="url" id="inputLink" placeholder="https://example.com">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeRecipeModal()">ביטול</button>
+                    <button type="submit" class="btn btn-primary">שמירה</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
-        // רשימת כל 54 המתכונים הכוללת קישורים וקטגוריות
-        const recipes = [
-            { id: 1, name: "פסטה שמנת ופטריות", cat: "עיקריות", url: "https://example.com/1" },
-            { id: 2, name: "חזה עוף במרינדה", cat: "עיקריות", url: "https://example.com/2" },
-            { id: 3, name: "אורז צהוב עם תירס", cat: "תוספות", url: "https://example.com/3" },
-            { id: 4, name: "עוגת שוקולד קלאסית", cat: "קינוחים", url: "https://example.com/4" },
-            { id: 5, name: "סלט יווני אסלי", cat: "סלטים", url: "https://example.com/5" },
-            { id: 6, name: "לחם מחמצת ביתי", cat: "מאפים", url: "https://example.com/6" },
-            { id: 7, name: "קציצות בשר ברוטב עגבניות", cat: "עיקריות", url: "https://example.com/7" },
-            { id: 8, name: "תפוחי אדמה בתנור", cat: "תוספות", url: "https://example.com/8" },
-            { id: 9, name: "פנקייק אמריקאי", cat: "קינוחים", url: "https://example.com/9" },
-            { id: 10, name: "לזניות גבינות ומנגולד", cat: "עיקריות", url: "https://example.com/10" },
-            { id: 11, name: "מרק כתום עשיר", cat: "תוספות", url: "https://example.com/11" },
-            { id: 12, name: "סלט ירוק עם חמוציות", cat: "סלטים", url: "https://example.com/12" },
-            { id: 13, name: "פוקאצ'ה שום ושמן זית", cat: "מאפים", url: "https://example.com/13" },
-            { id: 14, name: "מוקפץ עוף עם נודלס", cat: "עיקריות", url: "https://example.com/14" },
-            { id: 15, name: "שקשוקה ביתית", cat: "עיקריות", url: "https://example.com/15" },
-            { id: 16, name: "עוגיות שוקולד צ'יפס", cat: "קינוחים", url: "https://example.com/16" },
-            { id: 17, name: "שעועית ירוקה מוקפצת", cat: "תוספות", url: "https://example.com/17" },
-            { id: 18, name: "סלט קינואה ועשבי תיבול", cat: "סלטים", url: "https://example.com/18" },
-            { id: 19, name: "פאי תפוחים ביתי", cat: "קינוחים", url: "https://example.com/19" },
-            { id: 20, name: "בורקס גבינה מפתח", cat: "מאפים", url: "https://example.com/20" },
-            { id: 21, name: "קוסקוס עם ירקות", cat: "תוספות", url: "https://example.com/21" },
-            { id: 22, name: "דג סלמון בתנור", cat: "עיקריות", url: "https://example.com/22" },
-            { id: 23, name: "סלט כרוב וסומאק", cat: "סלטים", url: "https://example.com/23" },
-            { id: 24, name: "מלבי פרווה עשיר", cat: "קינוחים", url: "https://example.com/24" },
-            { id: 25, name: "חלה לשבת", cat: "מאפים", url: "https://example.com/25" },
-            { id: 26, name: "המבורגר ביתי", cat: "עיקריות", url: "https://example.com/26" },
-            { id: 27, name: "צ'יפס בתנור", cat: "תוספות", url: "https://example.com/27" },
-            { id: 28, name: "סלט טונה וביצה קשה", cat: "סלטים", url: "https://example.com/28" },
-            { id: 29, name: "בראוניז שוקולד עסיסי", cat: "קינוחים", url: "https://example.com/29" },
-            { id: 30, name: "פיצה איטלקית ביתית", cat: "מאפים", url: "https://example.com/30" },
-            { id: 31, name: "פלאפל בבית", cat: "עיקריות", url: "https://example.com/31" },
-            { id: 32, name: "מג'דרה של בית", cat: "תוספות", url: "https://example.com/32" },
-            { id: 33, name: "סלט גזר וג'ינג'ר", cat: "סלטים", url: "https://example.com/33" },
-            { id: 34, name: "קרם שניט קלאסי", cat: "קינוחים", url: "https://example.com/34" },
-            { id: 35, name: "לחמניות שום רכות", cat: "מאפים", url: "https://example.com/35" },
-            { id: 36, name: "שניצל זהוב ופריך", cat: "עיקריות", url: "https://example.com/36" },
-            { id: 37, name: "פירה תפוחי אדמה", cat: "תוספות", url: "https://example.com/37" },
-            { id: 38, name: "סלט סלק ומשמש", cat: "סלטים", url: "https://example.com/38" },
-            { id: 39, name: "עוגת גבינה אפויה", cat: "קינוחים", url: "https://example.com/39" },
-            { id: 40, name: "סמבוסק חומוס", cat: "מאפים", url: "https://example.com/40" },
-            { id: 41, name: "פלפלים ממולאים", cat: "עיקריות", url: "https://example.com/41" },
-            { id: 42, name: "ירקות ירוקים באידוי", cat: "תוספות", url: "https://example.com/42" },
-            { id: 43, name: "סלט מלפפונים ושמיר", cat: "סלטים", url: "https://example.com/43" },
-            { id: 44, name: "סופלה שוקולד חם", cat: "קינוחים", url: "https://example.com/44" },
-            { id: 45, name: "פיתות במחבת", cat: "מאפים", url: "https://example.com/45" },
-            { id: 46, name: "עוף שלם בתנור", cat: "עיקריות", url: "https://example.com/46" },
-            { id: 47, name: "כרובית אפויה בטחינה", cat: "תוספות", url: "https://example.com/47" },
-            { id: 48, name: "סלט עגבניות שרי וחריף", cat: "סלטים", url: "https://example.com/48" },
-            { id: 49, name: "עוגת גזר ותבלינים", cat: "קינוחים", url: "https://example.com/49" },
-            { id: 50, name: "קרואסון חמאה", cat: "מאפים", url: "https://example.com/50" },
-            { id: 51, name: "גולאש בקר הונגרי", cat: "עיקריות", url: "https://example.com/51" },
-            { id: 52, name: "אורז אדום עם עדשים", cat: "תוספות", url: "https://example.com/52" },
-            { id: 53, name: "סלט קולסלאו ביתי", cat: "סלטים", url: "https://example.com/53" },
-            { id: 54, name: "כדורי שוקולד לילדים", cat: "קינוחים", url: "https://example.com/54" }
+        // Initial Dataset
+        const initialRecipes = [
+            // Full Recipes
+            {
+                id: "1",
+                title: "פיצה משפחתית (ל-5 פיצות)",
+                category: "מנות עיקריות",
+                difficulty: "בינוני",
+                ingredients: "לבצק: 2 ק\"ג קמח, 1 ליטר מים, 1 כף מלח, 1 כף סוכר, 150 מ\"ל שמן, 5 כפות שמרים.\nלרוטב: עגבניות מרוסקות, מלח, פלפל, אורגנו, 1200 גרם גבינה צהובה.",
+                instructions: "לשים את חומרי הבצק (מוסיפים מלח בסוף) ומתפיחים שעה וחצי. מרדדים, מורחים רוטב, מפזרים גבינה ותוספות ואופים.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "2",
+                title: "קציצות ברוטב עגבניות",
+                category: "מנות עיקריות",
+                difficulty: "קל",
+                ingredients: "לקציצות: 1 ק\"ג בשר טחון, 3 כפות פירורי לחם, 1 ביצה, סודה לשתייה, שום, מלח, פלפל, פפריקה.\nלרוטב: שמן, שום, פפריקה, רסק עגבניות, עגבניות מגוררות, סילאן, תפוחי אדמה.",
+                instructions: "מכינים את הרוטב בסיר. יוצרים קציצות מהמרכיבים ומבשלים אותן בתוך הרוטב יחד עם תפוחי האדמה עד שהם מתרככים.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "3",
+                title: "תבשיל כתף בקר ביין אדום",
+                category: "מנות עיקריות",
+                difficulty: "קשה",
+                ingredients: "נתח כתף 5, 1-2 בקבוקי יין אדום יבש, בצל, סלרי, גזר, שום, טימין, מרווה, רוזמרין, ציפורן, אגוז מוסקט, רסק עגבניות, קמח/קורנפלור, ברנדי/וויסקי, שמן, מלח, פלפל.",
+                instructions: "מצמצמים את الיין. צורבים את הבשר, מטגנים ירקות ותבלינים, מוסיפים ברנדי, מחזירים את הבשר ויוצקים את היין והמים. אופים בתנור כשהסיר מכוסה (3 שעות ב-150 מעלות). בסיום, מסננים ומצמצמים את הרוטב.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "4",
+                title: "טבית (חמין עיראקי)",
+                category: "מנות עיקריות",
+                difficulty: "בינוני",
+                ingredients: "עוף, 2 בצלים, 6 עגבניות, שום, כמון, כורכום, פפריקה, קינמון, ציפורן, רסק עגבניות, 4 כוסות אורז, מלח.",
+                instructions: "מטגנים בצל, עגבניות, שום ותבלינים. מוסיפים עוף ומים ומבשלים 40 דקות. מוסיפים אורז ומלח ומבשלים על אש נמוכה.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "5",
+                title: "עלי גפן וגמבות ממולאים בעוף טחון ואורז",
+                category: "מנות עיקריות",
+                difficulty: "קשה",
+                ingredients: "עלי גפן, גמבות, בצלים, 1 ק\"ג עוף טחון, 2 כוסות אורז עגול, עשבי תיבול, שמן זית, תבלינים.\nלרוטב: רסק עגבניות, מים רותחים, מיץ לימון, שמן זית, סוכר, מלח, פלפל.",
+                instructions: "חולטים את עלי הגפן. מערבבים את חומרי המילוי וממלאים את העלים והגמבות. מסדרים בסיר מרופד בבצל, יוצקים את הרוטב, מניחים משקולת ומבשלים שעה וחצי עד שעתיים על אש נמוכה.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "6",
+                title: "מלוחיה",
+                category: "מנות עיקריות",
+                difficulty: "בינוני",
+                ingredients: "מלוחיה, חלקי עוף, חוויאג' למרק, 2 שיני שום, 1 כפית כוסברה טחונה, שמן.",
+                instructions: "מרתיחים את העוף, מנקים קצף, שוטפים ומחזירים לסיר עם מים נקיים ותבלינים. מטגנים בנפרד שום וכוסברה. מדללים את המלוחיה במעט מרק, מוסיפים לסיר העוף ומביאים לגלישה.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "7",
+                title: "פסטה ביתית / בצק פסטה טרייה",
+                category: "מנות עיקריות",
+                difficulty: "בינוני",
+                ingredients: "1/2 ק\"ג קמח דורום (או סמולינה), 5 ביצים (או ביצה אחת לכל 100 גרם קמח), מלח.",
+                instructions: "לשים את המרכיבים לבצק חלק, עוטפים בניילון נצמד ומקררים לשעה. לאחר מכן מרדדים וחותכים במכונת פסטה לצורה הרצויה.",
+                link: "https://www.haaretz.co.il/food/recipes/RECIPE-1.2898991",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "8",
+                title: "חלה קלועה / חלות לשבת",
+                category: "אפייה",
+                difficulty: "בינוני",
+                ingredients: "1 ק\"ג קמח, 2 כפות שמרים, 50-100 גרם סוכר, 20 גרם מלח, 600 גרם מים פושרים, 60 גרם שמן קנולה. אופציונלי: ביצה אחת.",
+                instructions: "מערבבים קמח, שמרים, סוכר ומים. מוסיפים שמן ומלח ולשים 10 דקות לבצק אחיד. מתפיחים (כ-50 דקות). מחלקים ל-4, קולעים, מורחים ביצה וסומסום ואופים ב-200 מעלות עד השחמה.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "9",
+                title: "לחם שום",
+                category: "אפייה",
+                difficulty: "בינוני",
+                ingredients: "לבצק: 3/4 כוס חלב, 1 כף שמרים, 1 כף סוכר, 1 כפית מלח, 1 ביצה, 2.5 כוסות קמח, 30 גרם חמאה.\nלמלית: ראש שום כתוש, 70 גרם חמאה, 1 כפית דבש, תימין, מוצרלה.",
+                instructions: "לשים את חומרי הבצק ומתפיחים שעה. מכינים מלית, מרדדים את הבצק למלבן, מורחים מלית וגבינה ומעצבים בתבנית. מתפיחים 15 דקות ואופים ב-170 מעלות כ-30 דקות.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "10",
+                title: "לחם שיפון וחיטה לבנה",
+                category: "אפייה",
+                difficulty: "בינוני",
+                ingredients: "290 מ\"ל מים, 3 כפות שמן זית, 1 כפית חומץ, 1 כפית מלח, 200 גרם קמח שיפון מלא, 250 גרם קמח חיטה לבן, זרעי פשתן/צ'יה/אגוזים, 1.5 כפיות שמרים יבשים.",
+                instructions: "לשים את כל הרכיבים לבצק, מתפיחים, מעצבים כיכר ואופים בתנור.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "11",
+                title: "קינוח טריקולד מהיר",
+                category: "קינוחים",
+                difficulty: "קל",
+                ingredients: "500 גרם עוגיות שוקולד, 50 גרם חמאה, 2 כפות ליקר קפה.\nלקרם: 1.5 מיכל שמנת מתוקה (מוקצפת עם 100 גרם שוקולד מומס לכל שכבה - מריר, חלב ולבן).",
+                instructions: "טוחנים עוגיות, חמאה וליקר ומהדקים לתחתית. מקציפים שמנת עם כל סוג שוקולד בנפרד, יוצרים שכבות ומקפיאים.",
+                link: "https://www.lichtenstadt.com/2015/09/chocolate-caramel-tart",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "12",
+                title: "פאי לימון",
+                category: "קינוחים",
+                difficulty: "קשה",
+                ingredients: "לבצק: 1.5 כוסות קמח, 1/2 כוס חמאה, 1/4 כוס סוכר, 2 חלמונים, גרידת לימון, 2 כפות מים.\nלמילוי: 6 ביצים, 1 כוס סוכר, מיץ וגרידה מ-4 לימונים, 180 מ\"ל שמנת מתוקה.\nלמרנג: 6 חלבונים, סוכר.",
+                instructions: "מכינים בצק ומקררים שעה. אופים \"אפייה עיוורת\" (180 מעלות, 15 דקות עם משקולת ועוד 15 דקות בלי). יוצקים את המילוי, אופים ב-120 מעלות, מכינים מרנג מעל ומשחימים.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "13",
+                title: "כדורי שוקולד",
+                category: "קינוחים",
+                difficulty: "קל",
+                ingredients: "200 גרם ביסקוויטים, 10 כפות סוכר, 5 כפות קקאו, 7 כפות חלב, 100 גרם חמאה, 1 כפית וניל.",
+                instructions: "ממיסים בסיר חמאה, חלב, סוכר, קקאו ווניל. מפוררים את הביסקוויטים, מערבבים עם הנוזל, יוצרים כדורים ומגלגלים בסוכריות או קוקוס.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "14",
+                title: "גלידה ביתית",
+                category: "קינוחים",
+                difficulty: "קל",
+                ingredients: "2 מיכלי שמנת להקצפה, 1 פחית חלב מרוכז, 200 מ\"ל שמנת להקצפה נוספת מעורבבת עם 3 כפות ממרח (נוטלה/לוטוס/פיסטוק), שברי עוגיות אוראו.",
+                instructions: "מקציפים 2 מיכלי שמנת ומוסיפים חלב מרוכז. בנפרד מערבבים שמנת וממרח ומקפלים פנימה. שמים שברי אוראו בתחתית קופסה, מוזגים את התערובת ומקפיאים ל-6 שעות.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "15",
+                title: "כנאפה ביתית",
+                category: "קינוחים",
+                difficulty: "בינוני",
+                ingredients: "500 גרם קדאיף, 1/2 כוס שמן קנולה, גבינת טובורג וגבינת שמנת 30%.\nלסירופ: 1.5 כוסות סוכר, 1 כוס מים, מיץ מ-3/4 לימון, פיסטוק קלוי.",
+                instructions: "פותחים את הקדאיף עם השמן, מסדרים מחצית במחבת, מניחים מעל את הגבינות ומכסים ביתרת הקדאיף. מבשלים על הגז תוך כדי סיבוב, הופכים ומבשלים את הצד השני. יוצקים סירופ חם ומפזרים פיסטוקים.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "16",
+                title: "עוגת שוקולד לילדים לגן",
+                category: "קינוחים",
+                difficulty: "קל",
+                ingredients: "2-3 ביצים, 1 כוס סוכר, 1 כוס שמן, 1 כוס מים פושרים, 3/4 כוס מים חמים, 2 כוסות קמח, 1 שקית אבקת אפייה, 1 כפית סודה לשתייה, 4 כפות קקאו.\nלציפוי: שוקולד מריר, חמאה או חלב, סוכריות.",
+                instructions: "מקציפים ביצים וסוכר, מוסיפים שמן ומים. מנפים פנימה יבשים, מאחדים ואופים ב-180 מעלות למשך 40-50 דקות. ממיסים ציפוי ומורחים מעל.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "17",
+                title: "עוגת גבינה וביסקוויטים",
+                category: "קינוחים",
+                difficulty: "קל",
+                ingredients: "500 גרם גבינה לבנה, 1 חבילת פודינג וניל, 2 כפות סוכר, 1 כוס חלב, 1 מיכל שמנת להקצפה (250 מ\"ל), ביסקוויטים.",
+                instructions: "מקציפים שמנת, חלב, פודינג וסוכר. מקפלים פנימה את הגבינה הלבנה. מסדרים בתבנית שכבות של ביסקוויטים וקרם לסירוגין.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "18",
+                title: "אורז לסושי",
+                category: "תוספות ורטבים",
+                difficulty: "קל",
+                ingredients: "3 כוסות אורז סושי, 4.5 כוסות מים, 3 כפיות סוכר, 1 כפית מלח, חומץ.",
+                instructions: "שוטפים את האורז, מביאים לרתיחה עם המים ומבשלים 15 דקות. מתבלים בתערובת של חומץ, סוכר ומלח.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "19",
+                title: "רוטב הולנדייז",
+                category: "תוספות ורטבים",
+                difficulty: "בינוני",
+                ingredients: "4 חלמונים, 1 כף מיץ לימון, 120 גרם חמאה מומסת, מלח ופלפל.",
+                instructions: "טורפים חלמונים ולימון ב\"בן מארי\" עד להכפלת הנפח. מוסיפים חמאה מומסת בהדרגה תוך ערבוב מתמיד לאיחוד. מתבלים במלח ופלפל.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "20",
+                title: "ממרח כבד עוף",
+                category: "תוספות ורטבים",
+                difficulty: "קל",
+                ingredients: "כבדי עוף, בצל, מלח, פלפל, שמן.",
+                instructions: "מטגנים בצל עד לשקיפות, מוסיפים כבדים ומטגנים עד בישול מלא. מתבלים וטוחנים בבלנדר (ניתן להוסיף מעט נוזלים למרקם חלק).",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "21",
+                title: "עוגיות ג'ינג'ר ברד",
+                category: "קינוחים",
+                difficulty: "בינוני",
+                ingredients: "200 גרם סוכר דמררה, 200 גרם חמאה, 360 גרם סילאן, 120 גרם מים, 1 ק\"ג קמח מלא, 1.5 כפית מלח, אגוז מוסקט, ציפורן, ג'ינג'ר, פלפל אנגלי, סודה לשתייה, אבקת אפייה.",
+                instructions: "מערבלים חמאה וסוכר, מוסיפים סילאן ומים. מנפים יבשים, לשים לבצק ומקררים שעתיים. מרדדים, קורצים צורות ואופים ב-190 מעלות 10-12 דקות.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "22",
+                title: "בקלוואה של סבתא",
+                category: "קינוחים",
+                difficulty: "בינוני",
+                ingredients: "דפי פילו, 200 גרם אגוזים טחונים, 1 כף סוכר, שמן.\nלסירופ: 1.25 כוסות סוכר, 1 כוס מים, 2 כפות מיץ לימון.",
+                instructions: "חותכים פילו לפסים, מורחים שמן, מפזרים אגוזים ומגלגלים. מסדרים בתבנית, מורחים שמן ואופים ב-180 מעלות. יוצקים סירופ חם מורתח מעל.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "23",
+                title: "עוגת שוקולד כשרה לפסח",
+                category: "קינוחים",
+                difficulty: "קל",
+                ingredients: "3 ביצים, 200 גרם שוקולד מריר, 200 גרם חמאה/שמן, 100 גרם סוכר, 70 גרם קורנפלור, מלח גס.",
+                instructions: "ממיסים שוקולד וחמאה עם סוכר. מוסיפים ביצים בהדרגה תוך ערבוב, ואז קורנפלור. אופים ב-180 מעלות ל-20 דקות ומפזרים מלח גס מעל.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "24",
+                title: "עוגת גזר",
+                category: "אפייה",
+                difficulty: "קל",
+                ingredients: "3 גזרים, 100 גרם אגוזי מלך, 3/4 כוס שמן, 3/4 כוס סוכר, 2 ביצים, 1.25 כוסות קמח תופח, 1 כף קינמון, 1 כפית סודה לשתייה, 1 כפית מלח.",
+                instructions: "מערבבים רטובים בנפרד ויבשים בנפרד, מאחדים, יוצקים לתבנית ואופים ב-180 מעלות 20-30 דקות.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+            {
+                id: "25",
+                title: "ריבת פירות ביתית (של סבתא ויקי)",
+                category: "תוספות ורטבים",
+                difficulty: "קל",
+                ingredients: "2 ק\"ג פרי (משמש/תות/חושחש), 1 ק\"ג סוכר.",
+                instructions: "מבשלים פירות וסוכר חצי שעה על אש נמוכה ללא מכסה. מוזגים בצנצנות בעודו חם, פותחים וסוגרים לשחרור אוויר.",
+                link: "",
+                isFullRecipe: true,
+                favoriteBy: ""
+            },
+
+            // Link-Only Recipes
+            {
+                id: "26",
+                title: "אוזני המן קלאסיות במילוי נוטלה",
+                category: "קינוחים",
+                difficulty: "בינוני",
+                ingredients: "",
+                instructions: "",
+                link: "https://foody.co.il/foody_recipe/%d7%90%d7%95%d7%96%d7%a0%d7%99-%d7%94%d7%9e%d7%9f-%d7%a7%d7%9c%d7%a1%d7%99%d7%95%d7%aa-%d7%91%d7%9e%d7%99%d7%9c%d7%95%d7%99-%d7%a0%d7%95%d7%98%d7%9c%d7%94",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "27",
+                title: "פררו רושה ביתי",
+                category: "קינוחים",
+                difficulty: "קל",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.mako.co.il/food-cooking_magazine/SOS/Recipe-bd7cfae0b015f61026.htm",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "28",
+                title: "ממתק שוקולד ופקאן",
+                category: "קינוחים",
+                difficulty: "קל",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.10dakot.co.il/recipe/%D7%9E%D7%9E%D7%AA%D7%A7-%D7%A9%D7%95%D7%A7%D7%95%D7%9C%D7%93-%D7%95%D7%A4%D7%A7%D7%90%D7%9F",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "29",
+                title: "בואיקוס (לחמניות גבינה)",
+                category: "אפייה",
+                difficulty: "קל",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%91%D7%95%D7%90%D7%99%D7%A7%D7%95%D7%A1",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "30",
+                title: "פיש אנד צ'יפס דניס",
+                category: "מנות עיקריות",
+                difficulty: "בינוני",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%A4%D7%99%D7%A9-%D7%A6%D7%99%D7%A4%D7%A1",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "31",
+                title: "רביולי",
+                category: "מנות עיקריות",
+                difficulty: "קשה",
+                ingredients: "",
+                instructions: "",
+                link: "https://food.walla.co.il/item/3143786",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "32",
+                title: "מילוי רביולי (3 גבינות)",
+                category: "מנות עיקריות",
+                difficulty: "בינוני",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.matkonimil.co.il/blog/recipes/%d7%a8%d7%91%d7%99%d7%95%d7%9c%d7%99-%d7%91%d7%9e%d7%99%d7%9c%d7%95%d7%99-3-%d7%92%d7%91%d7%99%d7%a0%d7%95%d7%aa",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "33",
+                title: "לחם פצפצים (לחמניית בזיליקום / חלה)",
+                category: "אפייה",
+                difficulty: "בינוני",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%9C%D7%97%D7%9D-%D7%A4%D7%A6%D7%A4%D7%A6%D7%99%D7%9D",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "34",
+                title: "פסטת עדשים וכוסמין בפסטו קישואים ושקדים",
+                category: "מנות עיקריות",
+                difficulty: "בינוני",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.hashulchan.co.il/%d7%9e%d7%aa%d7%9b%d7%95%d7%a0%d7%99%d7%9d/%d7%a4%d7%a1%d7%aa%d7%aa-%d7%a2%d7%93%d7%a9%d7%99%d7%9d-%d7%95%d7%9b%d7%95%d7%a1%d7%9e%d7%99%d7%9d-%d7%91%d7%a4%d7%a1%d7%aa%d7%95-%d7%a7%d7%99%d7%a9%d7%95%d7%90%d7%99%d7%9d/",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "35",
+                title: "בואיקוס קשקבל ותרד",
+                category: "אפייה",
+                difficulty: "קל",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%91%D7%95%D7%90%D7%99%D7%A7%D7%95%D7%A1-%D7%A9%D7%A9%D7%A7%D7%91%D7%9C-%D7%95%D7%AA%D7%A8%D7%93",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "36",
+                title: "עוגת אוראו קלה",
+                category: "קינוחים",
+                difficulty: "קל",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%A2%D7%95%D7%92%D7%AA-%D7%90%D7%95%D7%A8%D7%90%D7%95-%D7%94%D7%95%D7%A8%D7%A1%D7%AA/",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "37",
+                title: "עוגיות שוקולד צ'יפס",
+                category: "קינוחים",
+                difficulty: "קל",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.krutit.co.il/%D7%A2%D7%95%D7%92%D7%99%D7%95%D7%AA-%D7%A9%D7%95%D7%A7%D7%95%D7%9C%D7%93-%D7%A6%D7%99%D7%A4%D7%A1-%D7%94%D7%9B%D7%99-%D7%98%D7%A2%D7%99%D7%9E%D7%95%D7%AA-%D7%91%D7%A2%D7%95%D7%9C%D7%9D",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "38",
+                title: "עוגת תפוחים",
+                category: "אפייה",
+                difficulty: "קל",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.metukimsheli.com/2013/11/6803",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "39",
+                title: "מרנג נשיקות",
+                category: "קינוחים",
+                difficulty: "קל",
+                ingredients: "",
+                instructions: "",
+                link: "https://food.walla.co.il/item/3226896",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "40",
+                title: "רוזלך",
+                category: "קינוחים",
+                difficulty: "בינוני",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.haaretz.co.il/food/recipes/RECIPE-1.2898991",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "41",
+                title: "עוגת לוטוס",
+                category: "קינוחים",
+                difficulty: "קל",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.mako.co.il/food-recipes/recipes_column-dairy_recipes/Recipe-a8e9f7a7b5b4e31006.htm",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "42",
+                title: "עוגת שוקולד",
+                category: "אפייה",
+                difficulty: "קל",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.tavshilim.co.il/recipe/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D-%D7%9C%D7%A2%D7%95%D7%92%D7%95%D7%AA/%D7%A2%D7%95%D7%92%D7%AA-%D7%A9%D7%95%D7%A7%D7%95%D7%9C%D7%93",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "43",
+                title: "צבעי מאכל טבעיים",
+                category: "תוספות ורטבים",
+                difficulty: "קל",
+                ingredients: "",
+                instructions: "",
+                link: "https://liva.co.il/natural-food-colors-for-home-preparation",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "44",
+                title: "מחית פיסטוק",
+                category: "תוספות ורטבים",
+                difficulty: "קל",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.yehudit-aviv.co.il/%D7%9C%D7%9C%D7%90-%D7%92%D7%9C%D7%95%D7%98%D7%9F/%D7%9E%D7%97%D7%99%D7%AA-%D7%A4%D7%99%D7%A1%D7%98%D7%95%D7%A7",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "45",
+                title: "ריזוטו שמנת ופטריות",
+                category: "מנות עיקריות",
+                difficulty: "בינוני",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.ronyohananov.com/post/%D7%A8%D7%99%D7%96%D7%95%D7%98%D7%95-%D7%A9%D7%9E%D7%A0%D7%AA-%D7%A4%D7%98%D7%A8%D7%99%D7%95%D7%AA-%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D-%D7%A4%D7%98%D7%A0%D7%98",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "46",
+                title: "בגט עם זיתים",
+                category: "אפייה",
+                difficulty: "בינוני",
+                ingredients: "",
+                instructions: "",
+                link: "https://youtu.be/jmJkU3UCQZM?si=OXhAqm9sZdglLpKq",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "47",
+                title: "חלות לשבת (אינסטגרם)",
+                category: "אפייה",
+                difficulty: "בינוני",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.instagram.com/reel/C19pcSGiuRb/?igsh=NmtyOGoxcmZjYzFv",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "48",
+                title: "עוגת טריקולד שלוש שכבות",
+                category: "קינוחים",
+                difficulty: "בינוני",
+                ingredients: "",
+                instructions: "",
+                link: "https://nikib.co.il/cakes-dessert/3414",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "49",
+                title: "לחמניות המבורגר",
+                category: "אפייה",
+                difficulty: "בינוני",
+                ingredients: "",
+                instructions: "",
+                link: "https://kerenagam.co.il/%D7%9C%D7%97%D7%9E%D7%A0%D7%99%D7%95%D7%AA-%D7%94%D7%9E%D7%91%D7%95%D7%A8%D7%92%D7%A8",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "50",
+                title: "קציצות עוף בריאות",
+                category: "מנות עיקריות",
+                difficulty: "קל",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.instagram.com/reel/DKrFCH8oojm/?igsh=MWQxc3d1ZzZzMG5zdA",
+                isFullRecipe: false,
+                favoriteBy: ""
+            },
+            {
+                id: "51",
+                title: "עוגת שוקולד ועוגיות של עדיקוש",
+                category: "קינוחים",
+                difficulty: "בינוני",
+                ingredients: "",
+                instructions: "",
+                link: "https://www.mako.co.il/food-cooking_magazine/adikosh_sweet_recipes/Recipe-15c95f7dc541481026.htm",
+                isFullRecipe: false,
+                favoriteBy: ""
+            }
         ];
 
-        let activeCat = 'הכל';
-        let query = '';
+        // State Management
+        let recipes = [];
+        let activeCategory = 'הכל';
+        let searchQuery = '';
+        let pendingFavId = null;
 
-        function render() {
-            const grid = document.getElementById('recipeGrid');
-            const counter = document.getElementById('counter');
-            grid.innerHTML = '';
+        const categories = ['הכל', 'המועדפים שלי', 'מנות עיקריות', 'אפייה', 'קינוחים', 'תוספות ורטבים'];
 
+        // App Initialization
+        function initApp() {
+            const savedData = localStorage.getItem('my_recipes_app_v2');
+            if (savedData) {
+                recipes = JSON.parse(savedData);
+            } else {
+                recipes = initialRecipes;
+                saveToLocalStorage();
+            }
+            renderCategories();
+            renderRecipes();
+
+            // Scroll Listener for Back To Top
+            window.addEventListener('scroll', () => {
+                const btn = document.getElementById('backToTopBtn');
+                if (window.scrollY > 300) {
+                    btn.classList.add('visible');
+                } else {
+                    btn.classList.remove('visible');
+                }
+            });
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('my_recipes_app_v2', JSON.stringify(recipes));
+        }
+
+        // Render Categories
+        function renderCategories() {
+            const container = document.getElementById('categoryContainer');
+            container.innerHTML = categories.map(cat => `
+                <button class="cat-btn ${cat === activeCategory ? 'active' : ''}" onclick="setCategory('${cat}')">
+                    ${cat === 'המועדפים שלי' ? '❤️ ' : ''}${cat}
+                </button>
+            `).join('');
+        }
+
+        function setCategory(cat) {
+            activeCategory = cat;
+            renderCategories();
+            renderRecipes();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+            renderRecipes();
+        }
+
+        // Render Cards
+        function renderRecipes() {
+            const fullGrid = document.getElementById('fullRecipesGrid');
+            const linkGrid = document.getElementById('linkRecipesGrid');
+            const fullSec = document.getElementById('fullRecipesSection');
+            const linkSec = document.getElementById('linkRecipesSection');
+            const emptyState = document.getElementById('emptyState');
+
+            // Filter logic
             const filtered = recipes.filter(r => {
-                const matchCat = activeCat === 'הכל' || r.cat === activeCat;
-                const matchSearch = r.name.toLowerCase().includes(query.toLowerCase());
-                return matchCat && matchSearch;
+                // Category Filter
+                if (activeCategory === 'המועדפים שלי') {
+                    if (!r.favoriteBy) return false;
+                } else if (activeCategory !== 'הכל') {
+                    if (r.category !== activeCategory) return false;
+                }
+
+                // Search Filter (Title OR Ingredients)
+                if (searchQuery) {
+                    const matchTitle = r.title.toLowerCase().includes(searchQuery);
+                    const matchIngredients = r.ingredients ? r.ingredients.toLowerCase().includes(searchQuery) : false;
+                    return matchTitle || matchIngredients;
+                }
+
+                return true;
             });
 
-            counter.textContent = `מציג ${filtered.length} מתוך 54 מתכונים`;
+            // Split into Section 1 (Full Recipes) and Section 2 (Link Only)
+            const fullList = filtered.filter(r => r.isFullRecipe);
+            const linkList = filtered.filter(r => !r.isFullRecipe);
 
-            filtered.forEach(r => {
-                const el = document.createElement('div');
-                el.className = 'card';
-                el.innerHTML = `
-                    <div class="card-top">
-                        <span class="card-title">${r.id}. ${r.name}</span>
-                        <span class="tag">${r.cat}</span>
+            // Hide/Show sections based on results
+            fullSec.style.display = fullList.length > 0 ? 'block' : 'none';
+            linkSec.style.display = linkList.length > 0 ? 'block' : 'none';
+            emptyState.style.display = (filtered.length === 0) ? 'block' : 'none';
+
+            fullGrid.innerHTML = fullList.map(createCardHTML).join('');
+            linkGrid.innerHTML = linkList.map(createCardHTML).join('');
+        }
+
+        function createCardHTML(r) {
+            const isFav = !!r.favoriteBy;
+            const diffClass = r.difficulty === 'קל' ? 'badge-easy' : (r.difficulty === 'בינוני' ? 'badge-medium' : 'badge-hard');
+
+            return `
+                <div class="card" id="card-${r.id}">
+                    <div>
+                        <div class="card-header">
+                            <div class="card-title">${escapeHTML(r.title)}</div>
+                            <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${r.id}')" title="${isFav ? 'הסר ממועדפים' : 'סמן כמועדף'}">
+                                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            </button>
+                        </div>
+
+                        <div class="badges-row">
+                            <span class="badge badge-cat">${escapeHTML(r.category)}</span>
+                            <span class="badge ${diffClass}">${escapeHTML(r.difficulty)}</span>
+                            ${isFav ? `<span class="fav-tag">❤️ מועדף על: ${escapeHTML(r.favoriteBy)}</span>` : ''}
+                        </div>
+
+                        ${r.isFullRecipe ? `
+                            <div class="content-block">
+                                <h4>מצרכים:</h4>
+                                <p>${escapeHTML(r.ingredients)}</p>
+                                <h4>הוראות הכנה:</h4>
+                                <p>${escapeHTML(r.instructions)}</p>
+                            </div>
+                        ` : ''}
+
+                        ${r.link ? `
+                            <a href="${escapeHTML(r.link)}" target="_blank" class="external-link-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                לצפייה במתכון המלא באתר
+                            </a>
+                        ` : ''}
                     </div>
-                    <a href="${r.url}" target="_blank" rel="noopener" class="btn-link">פתחי מתכון ➔</a>
-                `;
-                grid.appendChild(el);
-            });
+
+                    <div class="card-actions">
+                        <button class="btn-icon" onclick="openRecipeModal('${r.id}')" title="עריכה">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        </button>
+                        <button class="btn-icon delete" onclick="deleteRecipe('${r.id}')" title="מחיקה">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            `;
         }
 
-        function setFilter(cat) {
-            activeCat = cat;
-            document.querySelectorAll('.cat-btn').forEach(b => {
-                b.classList.toggle('active', b.textContent === cat);
-            });
-            render();
+        // Favorites Handler
+        function toggleFavorite(id) {
+            const recipe = recipes.find(r => r.id === id);
+            if (!recipe) return;
+
+            if (recipe.favoriteBy) {
+                // Remove favorite
+                recipe.favoriteBy = '';
+                saveToLocalStorage();
+                renderRecipes();
+            } else {
+                // Open modal for name
+                pendingFavId = id;
+                document.getElementById('favNameInput').value = '';
+                document.getElementById('favModal').classList.add('active');
+            }
         }
 
-        document.getElementById('searchInput').addEventListener('input', e => {
-            query = e.target.value;
-            render();
-        });
+        function closeFavModal() {
+            document.getElementById('favModal').classList.remove('active');
+            pendingFavId = null;
+        }
 
-        render();
+        function saveFavoriteName() {
+            const name = document.getElementById('favNameInput').value.trim();
+            if (!name) {
+                alert('אנא הזן שם');
+                return;
+            }
+            const recipe = recipes.find(r => r.id === pendingFavId);
+            if (recipe) {
+                recipe.favoriteBy = name;
+                saveToLocalStorage();
+                renderRecipes();
+            }
+            closeFavModal();
+        }
+
+        // Add/Edit Modal Handler
+        function openRecipeModal(id = null) {
+            const modal = document.getElementById('recipeModal');
+            const form = document.getElementById('recipeForm');
+            form.reset();
+
+            if (id) {
+                const r = recipes.find(item => item.id === id);
+                document.getElementById('modalTitle').textContent = 'עריכת מתכון';
+                document.getElementById('editRecipeId').value = r.id;
+                document.getElementById('inputTitle').value = r.title;
+                document.getElementById('inputType').value = r.isFullRecipe ? 'full' : 'link';
+                document.getElementById('inputCategory').value = r.category;
+                document.getElementById('inputDifficulty').value = r.difficulty;
+                document.getElementById('inputIngredients').value = r.ingredients || '';
+                document.getElementById('inputInstructions').value = r.instructions || '';
+                document.getElementById('inputLink').value = r.link || '';
+            } else {
+                document.getElementById('modalTitle').textContent = 'הוספת מתכון חדש';
+                document.getElementById('editRecipeId').value = '';
+            }
+
+            toggleFormFields();
+            modal.classList.add('active');
+        }
+
+        function closeRecipeModal() {
+            document.getElementById('recipeModal').classList.remove('active');
+        }
+
+        function toggleFormFields() {
+            const type = document.getElementById('inputType').value;
+            const isFull = (type === 'full');
+            document.getElementById('groupIngredients').style.display = isFull ? 'block' : 'none';
+            document.getElementById('groupInstructions').style.display = isFull ? 'block' : 'none';
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('editRecipeId').value;
+            const title = document.getElementById('inputTitle').value.trim();
+            const type = document.getElementById('inputType').value;
+            const category = document.getElementById('inputCategory').value;
+            const difficulty = document.getElementById('inputDifficulty').value;
+            const ingredients = document.getElementById('inputIngredients').value.trim();
+            const instructions = document.getElementById('inputInstructions').value.trim();
+            const link = document.getElementById('inputLink').value.trim();
+
+            const isFullRecipe = (type === 'full');
+
+            if (id) {
+                // Update existing
+                const index = recipes.findIndex(r => r.id === id);
+                if (index !== -1) {
+                    recipes[index] = {
+                        ...recipes[index],
+                        title,
+                        category,
+                        difficulty,
+                        ingredients: isFullRecipe ? ingredients : '',
+                        instructions: isFullRecipe ? instructions : '',
+                        link,
+                        isFullRecipe
+                    };
+                }
+            } else {
+                // Create new
+                const newRecipe = {
+                    id: Date.now().toString(),
+                    title,
+                    category,
+                    difficulty,
+                    ingredients: isFullRecipe ? ingredients : '',
+                    instructions: isFullRecipe ? instructions : '',
+                    link,
+                    isFullRecipe,
+                    favoriteBy: ''
+                };
+                recipes.unshift(newRecipe);
+            }
+
+            saveToLocalStorage();
+            renderRecipes();
+            closeRecipeModal();
+        }
+
+        function deleteRecipe(id) {
+            if (confirm('האם אתה בטוח שברצונך למחוק מתכון זה?')) {
+                recipes = recipes.filter(r => r.id !== id);
+                saveToLocalStorage();
+                renderRecipes();
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // Initialize on Load
+        window.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
