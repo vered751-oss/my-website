@@ -3,282 +3,296 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ספר המתכונים שלי</title>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>אפליקציית המתכונים - 54 מתכונים</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #ff6b6b;
-            --secondary-color: #4ecdc4;
-            --bg-color: #f7f9fc;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
             --card-bg: #ffffff;
-            --text-color: #2d3436;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 16px;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Heebo', sans-serif;
+            font-family: 'Rubik', sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 16px;
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 12px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
         header {
             text-align: center;
-            margin-bottom: 20px;
+            padding: 16px 0 8px;
         }
 
         h1 {
-            font-size: 1.8rem;
-            color: #1e272e;
-            margin-bottom: 12px;
+            font-size: 1.6rem;
+            font-weight: 700;
         }
 
-        .search-container {
+        /* סרגל חיפוש וסינון דביק בראש המסך */
+        .sticky-controls {
             position: sticky;
-            top: 10px;
-            z-index: 100;
-            background-color: var(--bg-color);
-            padding-bottom: 10px;
+            top: 0;
+            background-color: var(--bg);
+            padding: 8px 0;
+            z-index: 50;
         }
 
-        .search-input {
+        .search-box {
             width: 100%;
-            padding: 14px 18px;
+            padding: 14px 16px;
             font-size: 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 25px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
             outline: none;
-            transition: border-color 0.2s;
-            box-shadow: var(--shadow);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            background: #fff;
         }
 
-        .search-input:focus {
-            border-color: var(--primary-color);
+        .search-box:focus {
+            border-color: var(--primary);
         }
 
-        .filters {
+        .categories {
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding: 8px 0 16px 0;
+            padding: 10px 0 4px;
             scrollbar-width: none;
         }
 
-        .filters::-webkit-scrollbar {
+        .categories::-webkit-scrollbar {
             display: none;
         }
 
-        .filter-btn {
-            background: #edf2f7;
-            border: none;
+        .cat-btn {
+            background: #fff;
+            border: 1px solid var(--border);
             padding: 8px 16px;
             border-radius: 20px;
             white-space: nowrap;
             font-size: 0.9rem;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
+            font-weight: 500;
         }
 
-        .filter-btn.active {
-            background-color: var(--primary-color);
+        .cat-btn.active {
+            background-color: var(--primary);
             color: white;
+            border-color: var(--primary);
         }
 
-        .counter-badge {
-            font-size: 0.9rem;
-            color: #636e72;
-            margin-bottom: 12px;
-            text-align: right;
+        .counter {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 12px 4px;
+            font-weight: 500;
         }
 
-        .recipes-grid {
+        /* גריד גמיש: טור 1 בטלפון, 2-4 בטאבלט ומחשב */
+        .grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 16px;
-        }
-
-        /* התאמה למסכי מחשב וטאבלט */
-        @media (min-width: 600px) {
-            .recipes-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 900px) {
-            .recipes-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s;
-        }
-
-        .card:active {
-            transform: scale(0.98);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
-        }
-
-        .card-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        .badge {
-            background-color: #ffeaa7;
-            color: #d63031;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        .card-details {
-            font-size: 0.85rem;
-            color: #636e72;
-            margin-bottom: 16px;
-            display: flex;
             gap: 12px;
         }
 
-        .recipe-link {
+        @media (min-width: 640px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+            .grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .tag {
+            background-color: #eff6ff;
+            color: var(--primary);
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .btn-link {
             display: block;
             text-align: center;
-            background-color: var(--secondary-color);
+            background-color: var(--primary);
             color: white;
             text-decoration: none;
             padding: 12px;
             border-radius: 12px;
-            font-weight: bold;
-            transition: background 0.2s;
+            font-weight: 500;
+            margin-top: 12px;
         }
 
-        .recipe-link:hover {
-            background-color: #3bcfc5;
+        .btn-link:active {
+            background-color: var(--primary-hover);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>📖 ספר המתכונים שלי</h1>
+        <h1>🍳 ספר המתכונים (54)</h1>
     </header>
 
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="חפש מתכון, רכיב או קטגוריה...">
+    <div class="sticky-controls">
+        <input type="text" id="searchInput" class="search-box" placeholder="חפש מתכון או קטגוריה...">
+        <div class="categories">
+            <button class="cat-btn active" onclick="setFilter('הכל')">הכל</button>
+            <button class="cat-btn" onclick="setFilter('עיקריות')">עיקריות</button>
+            <button class="cat-btn" onclick="setFilter('תוספות')">תוספות</button>
+            <button class="cat-btn" onclick="setFilter('מאפים')">מאפים</button>
+            <button class="cat-btn" onclick="setFilter('קינוחים')">קינוחים</button>
+            <button class="cat-btn" onclick="setFilter('סלטים')">סלטים</button>
+        </div>
     </div>
 
-    <div class="filters" id="filtersContainer">
-        <button class="filter-btn active" onclick="filterCategory('הכל')">הכל</button>
-        <button class="filter-btn" onclick="filterCategory('עיקריות')">עיקריות</button>
-        <button class="filter-btn" onclick="filterCategory('תוספות')">תוספות</button>
-        <button class="filter-btn" onclick="filterCategory('קינוחים')">קינוחים</button>
-        <button class="filter-btn" onclick="filterCategory('מאפים')">מאפים</button>
-        <button class="filter-btn" onclick="filterCategory('מהיר')">מהיר להכנה</button>
-    </div>
-
-    <div class="counter-badge" id="counter">מציג 54 מתכונים</div>
-
-    <div class="recipes-grid" id="recipesGrid"></div>
+    <div class="counter" id="counter">מציג 54 מתוך 54 מתכונים</div>
+    <div class="grid" id="recipeGrid"></div>
 
     <script>
-        // מערך הנתונים הכולל את 54 המתכונים
-        const recipesData = Array.from({ length: 54 }, (_, i) => {
-            const categories = ['עיקריות', 'תוספות', 'קינוחים', 'מאפים', 'מהיר'];
-            const category = categories[i % categories.length];
-            const id = i + 1;
-            return {
-                id: id,
-                title: `מתכון ${id}: ${getSampleTitle(id)}`,
-                category: category,
-                time: `${15 + (id % 6) * 10} דקות`,
-                difficulty: id % 2 === 0 ? 'קל' : 'בינוני',
-                link: `https://example.com/recipe/${id}` // החלף בקישור האמיתי שלך
-            };
-        });
+        // רשימת כל 54 המתכונים הכוללת קישורים וקטגוריות
+        const recipes = [
+            { id: 1, name: "פסטה שמנת ופטריות", cat: "עיקריות", url: "https://example.com/1" },
+            { id: 2, name: "חזה עוף במרינדה", cat: "עיקריות", url: "https://example.com/2" },
+            { id: 3, name: "אורז צהוב עם תירס", cat: "תוספות", url: "https://example.com/3" },
+            { id: 4, name: "עוגת שוקולד קלאסית", cat: "קינוחים", url: "https://example.com/4" },
+            { id: 5, name: "סלט יווני אסלי", cat: "סלטים", url: "https://example.com/5" },
+            { id: 6, name: "לחם מחמצת ביתי", cat: "מאפים", url: "https://example.com/6" },
+            { id: 7, name: "קציצות בשר ברוטב עגבניות", cat: "עיקריות", url: "https://example.com/7" },
+            { id: 8, name: "תפוחי אדמה בתנור", cat: "תוספות", url: "https://example.com/8" },
+            { id: 9, name: "פנקייק אמריקאי", cat: "קינוחים", url: "https://example.com/9" },
+            { id: 10, name: "לזניות גבינות ומנגולד", cat: "עיקריות", url: "https://example.com/10" },
+            { id: 11, name: "מרק כתום עשיר", cat: "תוספות", url: "https://example.com/11" },
+            { id: 12, name: "סלט ירוק עם חמוציות", cat: "סלטים", url: "https://example.com/12" },
+            { id: 13, name: "פוקאצ'ה שום ושמן זית", cat: "מאפים", url: "https://example.com/13" },
+            { id: 14, name: "מוקפץ עוף עם נודלס", cat: "עיקריות", url: "https://example.com/14" },
+            { id: 15, name: "שקשוקה ביתית", cat: "עיקריות", url: "https://example.com/15" },
+            { id: 16, name: "עוגיות שוקולד צ'יפס", cat: "קינוחים", url: "https://example.com/16" },
+            { id: 17, name: "שעועית ירוקה מוקפצת", cat: "תוספות", url: "https://example.com/17" },
+            { id: 18, name: "סלט קינואה ועשבי תיבול", cat: "סלטים", url: "https://example.com/18" },
+            { id: 19, name: "פאי תפוחים ביתי", cat: "קינוחים", url: "https://example.com/19" },
+            { id: 20, name: "בורקס גבינה מפתח", cat: "מאפים", url: "https://example.com/20" },
+            { id: 21, name: "קוסקוס עם ירקות", cat: "תוספות", url: "https://example.com/21" },
+            { id: 22, name: "דג סלמון בתנור", cat: "עיקריות", url: "https://example.com/22" },
+            { id: 23, name: "סלט כרוב וסומאק", cat: "סלטים", url: "https://example.com/23" },
+            { id: 24, name: "מלבי פרווה עשיר", cat: "קינוחים", url: "https://example.com/24" },
+            { id: 25, name: "חלה לשבת", cat: "מאפים", url: "https://example.com/25" },
+            { id: 26, name: "המבורגר ביתי", cat: "עיקריות", url: "https://example.com/26" },
+            { id: 27, name: "צ'יפס בתנור", cat: "תוספות", url: "https://example.com/27" },
+            { id: 28, name: "סלט טונה וביצה קשה", cat: "סלטים", url: "https://example.com/28" },
+            { id: 29, name: "בראוניז שוקולד עסיסי", cat: "קינוחים", url: "https://example.com/29" },
+            { id: 30, name: "פיצה איטלקית ביתית", cat: "מאפים", url: "https://example.com/30" },
+            { id: 31, name: "פלאפל בבית", cat: "עיקריות", url: "https://example.com/31" },
+            { id: 32, name: "מג'דרה של בית", cat: "תוספות", url: "https://example.com/32" },
+            { id: 33, name: "סלט גזר וג'ינג'ר", cat: "סלטים", url: "https://example.com/33" },
+            { id: 34, name: "קרם שניט קלאסי", cat: "קינוחים", url: "https://example.com/34" },
+            { id: 35, name: "לחמניות שום רכות", cat: "מאפים", url: "https://example.com/35" },
+            { id: 36, name: "שניצל זהוב ופריך", cat: "עיקריות", url: "https://example.com/36" },
+            { id: 37, name: "פירה תפוחי אדמה", cat: "תוספות", url: "https://example.com/37" },
+            { id: 38, name: "סלט סלק ומשמש", cat: "סלטים", url: "https://example.com/38" },
+            { id: 39, name: "עוגת גבינה אפויה", cat: "קינוחים", url: "https://example.com/39" },
+            { id: 40, name: "סמבוסק חומוס", cat: "מאפים", url: "https://example.com/40" },
+            { id: 41, name: "פלפלים ממולאים", cat: "עיקריות", url: "https://example.com/41" },
+            { id: 42, name: "ירקות ירוקים באידוי", cat: "תוספות", url: "https://example.com/42" },
+            { id: 43, name: "סלט מלפפונים ושמיר", cat: "סלטים", url: "https://example.com/43" },
+            { id: 44, name: "סופלה שוקולד חם", cat: "קינוחים", url: "https://example.com/44" },
+            { id: 45, name: "פיתות במחבת", cat: "מאפים", url: "https://example.com/45" },
+            { id: 46, name: "עוף שלם בתנור", cat: "עיקריות", url: "https://example.com/46" },
+            { id: 47, name: "כרובית אפויה בטחינה", cat: "תוספות", url: "https://example.com/47" },
+            { id: 48, name: "סלט עגבניות שרי וחריף", cat: "סלטים", url: "https://example.com/48" },
+            { id: 49, name: "עוגת גזר ותבלינים", cat: "קינוחים", url: "https://example.com/49" },
+            { id: 50, name: "קרואסון חמאה", cat: "מאפים", url: "https://example.com/50" },
+            { id: 51, name: "גולאש בקר הונגרי", cat: "עיקריות", url: "https://example.com/51" },
+            { id: 52, name: "אורז אדום עם עדשים", cat: "תוספות", url: "https://example.com/52" },
+            { id: 53, name: "סלט קולסלאו ביתי", cat: "סלטים", url: "https://example.com/53" },
+            { id: 54, name: "כדורי שוקולד לילדים", cat: "קינוחים", url: "https://example.com/54" }
+        ];
 
-        function getSampleTitle(id) {
-            const titles = [
-                'פסטה שמנת ופטריות', 'חזה עוף במרינדה', 'עוגת שוקולד חמה', 'אורז ירוק עם עשבי תיבול',
-                'שקשוקה קלאסית', 'לזניה בשר', 'סלט קינואה וירקות', 'לחם מחמצת ביתי', 'פנקייק אוורירי',
-                'מרק כתום עשיר', 'מוקפץ נודלס וירקות', 'קציצות בקר ברוטב'
-            ];
-            return titles[(id - 1) % titles.length];
-        }
+        let activeCat = 'הכל';
+        let query = '';
 
-        let currentCategory = 'הכל';
-        let searchQuery = '';
-
-        function renderRecipes() {
-            const grid = document.getElementById('recipesGrid');
+        function render() {
+            const grid = document.getElementById('recipeGrid');
             const counter = document.getElementById('counter');
             grid.innerHTML = '';
 
-            const filtered = recipesData.filter(r => {
-                const matchesCategory = currentCategory === 'הכל' || r.category === currentCategory;
-                const matchesSearch = r.title.includes(searchQuery) || r.category.includes(searchQuery);
-                return matchesCategory && matchesSearch;
+            const filtered = recipes.filter(r => {
+                const matchCat = activeCat === 'הכל' || r.cat === activeCat;
+                const matchSearch = r.name.toLowerCase().includes(query.toLowerCase());
+                return matchCat && matchSearch;
             });
 
-            counter.innerText = `מציג ${filtered.length} מתוך 54 מתכונים`;
+            counter.textContent = `מציג ${filtered.length} מתוך 54 מתכונים`;
 
             filtered.forEach(r => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div>
-                        <div class="card-header">
-                            <div class="card-title">${r.title}</div>
-                            <span class="badge">${r.category}</span>
-                        </div>
-                        <div class="card-details">
-                            <span>⏱️ ${r.time}</span>
-                            <span>רמה: ${r.difficulty}</span>
-                        </div>
+                const el = document.createElement('div');
+                el.className = 'card';
+                el.innerHTML = `
+                    <div class="card-top">
+                        <span class="card-title">${r.id}. ${r.name}</span>
+                        <span class="tag">${r.cat}</span>
                     </div>
-                    <a href="${r.link}" target="_blank" class="recipe-link">לצפייה במתכון המלא ➔</a>
+                    <a href="${r.url}" target="_blank" rel="noopener" class="btn-link">פתחי מתכון ➔</a>
                 `;
-                grid.appendChild(card);
+                grid.appendChild(el);
             });
         }
 
-        function filterCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.innerText === cat);
+        function setFilter(cat) {
+            activeCat = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => {
+                b.classList.toggle('active', b.textContent === cat);
             });
-            renderRecipes();
+            render();
         }
 
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            searchQuery = e.target.value.trim();
-            renderRecipes();
+        document.getElementById('searchInput').addEventListener('input', e => {
+            query = e.target.value;
+            render();
         });
 
-        // טעינה ראשונית
-        renderRecipes();
+        render();
     </script>
 </body>
 </html>
