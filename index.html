@@ -1,384 +1,289 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ספר המתכונים שלי</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Rubik', sans-serif; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>סורק מתכונים מתמונות</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --border: #e2e8f0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 650px;
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    .api-key-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    input[type="password"], input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    .upload-area {
+      border: 2px dashed var(--primary);
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      background: #f0f3ff;
+      transition: background 0.2s;
+    }
+
+    .upload-area:hover {
+      background: #e5ebff;
+    }
+
+    #preview {
+      max-width: 100%;
+      max-height: 250px;
+      border-radius: 8px;
+      margin-top: 15px;
+      display: none;
+    }
+
+    button {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background 0.2s;
+    }
+
+    button:hover { background-color: var(--primary-hover); }
+    button:disabled { background-color: #94a3b8; cursor: not-allowed; }
+
+    .loader {
+      display: none;
+      text-align: center;
+      margin: 20px 0;
+      font-weight: 600;
+    }
+
+    .recipe-card {
+      display: none;
+      margin-top: 25px;
+      border-top: 2px solid var(--border);
+      padding-top: 20px;
+    }
+
+    .meta-info {
+      display: flex;
+      gap: 15px;
+      background: #f1f5f9;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    ul, ol {
+      padding-right: 20px;
+      line-height: 1.6;
+    }
+
+    li { margin-bottom: 8px; }
+  </style>
 </head>
-<body class="bg-blue-50 text-slate-800 min-h-screen flex flex-col">
+<body>
 
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-blue-700 to-blue-900 text-white shadow-lg sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <i class="fa-solid to-blue-200 fa-utensils text-2xl text-blue-300"></i>
-                <h1 class="text-2xl font-bold tracking-wide">ספר המתכונים שלי</h1>
-            </div>
-            <button onclick="openModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-lg transition-all shadow flex items-center gap-2 text-sm md:text-base">
-                <i class="fa-solid fa-plus"></i> הוספת מתכון חדש
-            </button>
-        </div>
-    </header>
+<div class="container">
+  <h1>📷 סורק מתכונים AI</h1>
 
-    <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
+  <div class="api-key-group">
+    <label for="apiKey">מפתח Gemini API:</label>
+    <input type="password" id="apiKey" placeholder="הדבק כאן את מפתח ה-API שלך">
+  </div>
 
-        <!-- Controls Section -->
-        <div class="bg-white rounded-xl shadow-md p-4 md:p-6 mb-6 border border-blue-100">
-            <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-4">
-                
-                <!-- Search -->
-                <div class="relative w-full md:w-1/3">
-                    <i class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400"></i>
-                    <input type="text" id="searchInput" oninput="filterRecipes()" placeholder="חיפוש מתכון או רכיב..." 
-                           class="w-full pr-10 pl-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-                </div>
+  <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+    <div> לחץ לבחירת תמונה / צילום מסך או צלם במצלמה</div>
+    <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none">
+    <img id="preview" alt="תצוגה מקדימה">
+  </div>
 
-                <!-- Filters & Actions -->
-                <div class="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
-                    <button id="favFilterBtn" onclick="toggleFavFilter()" class="px-4 py-2 rounded-lg border border-blue-300 text-blue-700 hover:bg-blue-50 transition flex items-center gap-2 text-sm font-medium">
-                        <i class="fa-solid fa-heart text-red-500"></i> מועדפים בלבד
-                    </button>
-                    <button onclick="resetData()" title="שחזר מתכוני מקור" class="px-3 py-2 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-100 transition text-sm">
-                        <i class="fa-solid fa-rotate-left"></i> איפוס
-                    </button>
-                </div>
-            </div>
+  <button id="processBtn" disabled>חלוץ מתכון מהתמונה</button>
 
-            <!-- Categories -->
-            <div class="flex flex-wrap gap-2 pt-2 border-t border-blue-50" id="categoryTabs">
-                <!-- Dynamic categories populated by JS -->
-            </div>
-        </div>
+  <div id="loader" class="loader">מפענח את המתכון... ⏳</div>
 
-        <!-- Recipe Grid -->
-        <div id="recipeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Cards populated dynamically -->
-        </div>
-
-        <!-- Empty State -->
-        <div id="emptyState" class="hidden text-center py-12">
-            <i class="fa-solid fa-cookie-bite text-5xl text-blue-300 mb-3"></i>
-            <p class="text-slate-500 text-lg">לא נמצאו מתכונים המתאימים לחיפוש.</p>
-        </div>
-    </main>
-
-    <!-- Modal Form (Add/Edit) -->
-    <div id="modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center p-4 z-50 hidden">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden border border-blue-100">
-            <div class="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
-                <h3 id="modalTitle" class="text-xl font-bold">הוספת מתכון חדש</h3>
-                <button onclick="closeModal()" class="text-blue-100 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <form id="recipeForm" onsubmit="saveRecipe(event)" class="p-6 overflow-y-auto flex-grow space-y-4">
-                <input type="hidden" id="recipeId">
-                
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">שם המתכון *</label>
-                    <input type="text" id="recipeName" required class="w-full px-3 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">סוג / קטגוריה *</label>
-                        <select id="recipeType" required class="w-full px-3 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                            <option value="אפייה">אפייה</option>
-                            <option value="קינוח">קינוח</option>
-                            <option value="מנה עיקרית">מנה עיקרית</option>
-                            <option value="תוספת">תוספת</option>
-                            <option value="מנה ראשונה">מנה ראשונה</option>
-                            <option value="בישול">בישול</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">דרגת קושי *</label>
-                        <select id="recipeDifficulty" required class="w-full px-3 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                            <option value="קל">קל</option>
-                            <option value="בינוני">בינוני</option>
-                            <option value="קשה">קשה</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">קישור חיצוני (URL לאתר/סרטון)</label>
-                    <input type="url" id="recipeUrl" placeholder="https://..." class="w-full px-3 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">רכיבים והוראות הכנה</label>
-                    <textarea id="recipeDetails" rows="5" class="w-full px-3 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="פירוט רכיבים והוראות..."></textarea>
-                </div>
-
-                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50">ביטול</button>
-                    <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow">שמירה</button>
-                </div>
-            </form>
-        </div>
+  <div id="recipeResult" class="recipe-card">
+    <h2 id="recipeTitle"></h2>
+    <div class="meta-info">
+      <span>⏱️ הכנה: <strong id="prepTime"></strong></span>
+      <span>🔥 בישול: <strong id="cookTime"></strong></span>
+      <span>🍽️ מנות: <strong id="servings"></strong></span>
     </div>
 
-    <!-- Application Script -->
-    <script>
-        const initialRecipes = [
-            { id: "1", name: "אוזני המן קלאסיות במילוי נוטלה", type: "קינוח", difficulty: "בינוני", url: "https://foody.co.il/foody_recipe/%d7%90%d7%95%d7%96%d7%a0%d7%99-%d7%94%d7%9e%d7%9f-%d7%a7%d7%9c%d7%a1%d7%99%d7%95%d7%aa-%d7%91%d7%9e%d7%99%d7%9c%d7%95%d7%99-%d7%a0%d7%95%d7%98%d7%9c%d7%94/", details: "", isFav: false },
-            { id: "2", name: "פררו רושה ביתי", type: "קינוח", difficulty: "קל", url: "https://www.mako.co.il/food-cooking_magazine/SOS/Recipe-bd7cfae0b015f61026.htm?utm_source=Whatsapp&utm_medium=Share&Partner=Whatsapp_Share", details: "", isFav: false },
-            { id: "3", name: "ממתק שוקולד ופקאן", type: "קינוח", difficulty: "קל", url: "https://www.10dakot.co.il/recipe/%D7%9E%D7%9E%D7%AA%D7%A7-%D7%A9%D7%95%D7%A7%D7%95%D7%9C%D7%9D-%D7%95%D7%A4%D7%A7%D7%90%D7%9F/", details: "", isFav: false },
-            { id: "4", name: "בואיקוס (לחמניות גבינה)", type: "אפייה", difficulty: "קל", url: "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%91%D7%95%D7%90%D7%99%D7%A7%D7%95%D7%A1/", details: "", isFav: false },
-            { id: "5", name: "פיש אנד צ'יפס דניס", type: "מנה עיקרית", difficulty: "בינוני", url: "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%A4%D7%99%D7%A9-%D7%A6%D7%99%D7%A4%D7%A1/", details: "", isFav: false },
-            { id: "6", name: "רביולי", type: "מנה עיקרית", difficulty: "קשה", url: "https://food.walla.co.il/item/3143786", details: "", isFav: false },
-            { id: "7", name: "מילוי רביולי (3 גבינות)", type: "מנה עיקרית", difficulty: "בינוני", url: "https://www.matkonimil.co.il/blog/recipes/%d7%a8%d7%91%d7%99%d7%95%d7%9c%d7%99-%d7%91%d7%9e%d7%99%d7%9c%d7%95%d7%99-3-%d7%92%d7%91%d7%99%d7%a0%d7%95%d7%aa/", details: "", isFav: false },
-            { id: "8", name: "לחם פצפצים (לחמניית בזיליקום / חלה)", type: "אפייה", difficulty: "בינוני", url: "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%9C%D7%A2%D7%9D-%D7%A4%D7%A6%D7%A4%D7%A6%D7%99%D7%9D/", details: "", isFav: false },
-            { id: "9", name: "פסטת עדשים וכוסמין בפסטו קישואים ושקדים", type: "מנה עיקרית", difficulty: "בינוני", url: "https://www.hashulchan.co.il/מתכונים/פסטת-עדשים-וכוסמין-בפסטו-קישואים/?utm_source=Whatsapp&utm_medium=Messenger&utm_campaign=Share_Button", details: "", isFav: false },
-            { id: "10", name: "בואיקוס קשקבל ותרד", type: "אפייה", difficulty: "קל", url: "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%91%D7%95%D7%90%D7%99%D7%A7%D7%95%D7%A1-%D7%A7%D7%A9%D7%A7%D7%91%D7%9C-%D7%95%D7%AA%D7%A8%D7%93/", details: "", isFav: false },
-            { id: "11", name: "עוגת אוראו קלה", type: "קינוח", difficulty: "קל", url: "https://www.hashulchan.co.il/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D/%D7%A2%D7%95%D7%92%D7%AA-%D7%90%D7%95%D7%A8%D7%90%D7%95-%D7%94%D7%95%D7%A8%D7%A1%D7%AA/?utm_source=Jeeng", details: "", isFav: false },
-            { id: "12", name: "עוגיות שוקולד צ'יפס", type: "קינוח", difficulty: "קל", url: "https://www.krutit.co.il/%D7%A2%D7%95%D7%92%D7%99%D7%95%D7%AA-%D7%A9%D7%95%D7%A7%D7%95%D7%9C%D7%93-%D7%A6%D7%99%D7%A4%D7%A1-%D7%90%D7%9B%D7%99-%D7%98%D7%A2%D7%99%D7%9E%D7%95%D7%AA-%D7%91%D7%A2%D7%95%D7%9C%D7%9D/", details: "", isFav: false },
-            { id: "13", name: "עוגת תפוחים", type: "אפייה", difficulty: "קל", url: "https://www.metukimsheli.com/2013/11/6803/", details: "", isFav: false },
-            { id: "14", name: "נשיקות מרנג", type: "קינוח", difficulty: "קל", url: "https://food.walla.co.il/item/3226896", details: "", isFav: false },
-            { id: "15", name: "טארט שוקולד וקרמל מלוח", type: "קינוח", difficulty: "בינוני", url: "https://www.lichtenstadt.com/2015/09/chocolate-caramel-tart/", details: "", isFav: false },
-            { id: "16", name: "קינוח טריקולד מהיר", type: "קינוח", difficulty: "קל", url: "", details: "רכיבים: 500ג עוגיות שוקולד, 50ג חמאה, 2 כפות ליקר קפה. לקרם מריר/חלב/לבן: 1.5 מיכל שמנת מתוקה מוקצפת עם 100ג שוקולד מומס לכל שכבה.\nהוראות: טוחנים עוגיות, חמאה וליקר ומהדקים לתחתית. מקציפים שמנת עם כל שוקולד בנפרד, יוצרים שכבות ומקפיאים.", isFav: false },
-            { id: "17", name: "בצק פסטה טרייה", type: "בישול", difficulty: "בינוני", url: "", details: "רכיבים: 1/2 ק\"ג קמח דורום, 5 ביצים, מלח.\nהוראות: לשים את המרכיבים לבצק חלק, עוטפים בניילון נצמד ומקררים לשעה. מרדדים וחותכים במכונת פסטה.", isFav: false },
-            { id: "18", name: "רוזלך", type: "קינוח", difficulty: "בינוני", url: "https://www.haaretz.co.il/food/recipes/RECIPE-1.2898991", details: "", isFav: false },
-            { id: "19", name: "לחם שום", type: "אפייה", difficulty: "בינוני", url: "", details: "רכיבים: בצק: 3/4 כוס חלב, 1 כף שמרים, 1 כף סוכר, 1 כפית מלח, 1 ביצה, 2.5 כוסות קמח, 30ג חמאה. מלית: ראש שום כתוש, 70ג חמאה, 1 כפית דבש, תימין, מוצרלה.\nהוראות: לשים בצק ומתפיחים שעה. מכינים מלית, מרדדים למלבן, מורחים מלית וגבינה, מעצבים בתבנית, מתפיחים 15 דק' ואופים ב170- מעלות כ30- דקות.", isFav: false },
-            { id: "20", name: "עוגת לוטוס", type: "קינוח", difficulty: "קל", url: "https://www.mako.co.il/food-recipes/recipes_column-dairy_recipes/Recipe-a8e9f7a7b5b4e31006.htm", details: "", isFav: false },
-            { id: "21", name: "חלה קלועה", type: "אפייה", difficulty: "בינוני", url: "", details: "רכיבים: 1000ג קמח לחם, 20ג שמרים יבשים, 50-100ג סוכר, 20ג מלח, 600ג מים פושרים, 60ג שמן קנולה.\nהוראות: מערבבים קמח, שמרים, סוכר ומים. מוסיפים שמן ומלח ולשים 10 דק'. מתפיחים 50 דק', מחלקים ל-4, קולעים, מורחים ביצה וסומסום ואופים ב200- מעלות עד השחמה.", isFav: false },
-            { id: "22", name: "פאי לימון", type: "קינוח", difficulty: "קשה", url: "", details: "רכיבים: בצק: 1.5 כוסות קמח, 1/2 כוס חמאה, 1/4 כוס סוכר, 2 חלמונים, גרידת לימון, 2 כפות מים. מילוי: 6 ביצים, 1 כוס סוכר, מיץ וגרידה מ4- לימונים, 180 מ\"ל שמנת מתוקה. מרנג: 6 חלבונים, סוכר.\nהוראות: מכינים בצק ומקררים שעה. אופים אפייה עיוורת (180 מעלות, 15 דק' עם משקולת + 15 דק' בלי). יוצקים מילוי, אופים ב120- מעלות, מכינים מרנג מעל ומשחימים.", isFav: false },
-            { id: "23", name: "עוגת שוקולד", type: "אפייה", difficulty: "קל", url: "https://www.tavshilim.co.il/recipe/%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D-%D7%9C%D7%A2%D7%95%D7%92%D7%95%D7%AA/%D7%A2%D7%95%D7%92%D7%AA-%D7%A9%D7%95%D7%A7%D7%95%D7%9C%D7%93/", details: "", isFav: false },
-            { id: "24", name: "צבעי מאכל טבעיים", type: "תוספת", difficulty: "קל", url: "https://liva.co.il/natural-food-colors-for-home-preparation/", details: "", isFav: false },
-            { id: "25", name: "כדורי שוקולד", type: "קינוח", difficulty: "קל", url: "", details: "רכיבים: 200ג ביסקוויטים, 10 כפות סוכר, 5 כפות קקאו, 7 כפות חלב, 100ג חמאה, 1 כפית וניל.\nהוראות: ממיסים בסיר חמאה, חלב, סוכר, קקאו ווניל. מפוררים ביסקוויטים, מערבבים עם הנוזל, יוצרים כדורים ומגלגלים בסוכריות/קוקוס.", isFav: false },
-            { id: "26", name: "מחית פיסטוק", type: "תוספת", difficulty: "קל", url: "https://www.yehudit-aviv.co.il/%D7%9C%D7%9C%D7%90-%D7%92%D7%9C%D7%95%D7%98%D7%9F/%D7%9E%D7%97%D7%99%D7%AA-%D7%A4%D7%99%D7%A1%D7%98%D7%95%D7%A7/", details: "", isFav: false },
-            { id: "27", name: "עוגיות ג'ינג'ר ברד", type: "קינוח", difficulty: "בינוני", url: "", details: "רכיבים: 200ג סוכר דמררה, 200ג חמאה, 360ג סילאן, 120ג מים, 1 ק\"ג קמח מלא, 1.5 כפית מלח, אגוז מוסקט, ציפורן, ג'ינג'ר, פלפל אנגלי, סודה לשתייה, אבקת אפייה.\nהוראות: מערבלים חמאה וסוכר, מוסיפים סילאן ומים. מנפים יבשים, לשים לבצק ומקררים שעתיים. מרדדים, קורצים צורות ואופים ב190- מעלות 10-12 דקות.", isFav: false },
-            { id: "28", name: "גלידה ביתית", type: "קינוח", difficulty: "קל", url: "", details: "רכיבים: 2 מיכלי שמנת להקצפה, 1 פחית חלב מרוכז, 200 מ\"ל שמנת להקצפה + 3 כפות ממרח (נוטלה/לוטוס/פיסטוק), שברי אוראו.\nהוראות: מקציפים 2 שמנת, מוסיפים חלב מרוכז. בנפרד מערבבים שמנת וממרח ומקפלים פנימה. בתחתית קופסה שמים אוראו, מוזגים ואופים/מקפיאים ל6- שעות.", isFav: false },
-            { id: "29", name: "כנאפה ביתית", type: "קינוח", difficulty: "בינוני", url: "", details: "רכיבים: 500ג קדאיף, 1/2 כוס שמן קנולה, גבינת טובורג וגבינת שמנת 30%. סירופ: 1.5 כוסות סוכר, 1 כוס מים, מיץ מ3/4- לימון, פיסטוק קלוי.\nהוראות: פותחים קדאיף עם שמן, מסדרים מחצית במחבת, מעלים גבינות ומכסים ביתרה. מבשלים על הגז תוך סיבוב, הופכים ומבשלים צד שני. יוצקים סירופ חם ומפזרים פיסטוקים.", isFav: false },
-            { id: "30", name: "אורז לסושי", type: "תוספת", difficulty: "קל", url: "", details: "רכיבים: 3 כוסות אורז סושי, 4.5 כוסות מים, 3 כפיות סוכר, 1 כפית מלח, חומץ.\nהוראות: שוטפים את האורז, מביאים לרתיחה עם המים ומבשלים 15 דקות. מתבלים בתערובת החומץ, הסוכר והמלח.", isFav: false },
-            { id: "31", name: "בקלוואה של סבתא", type: "קינוח", difficulty: "בינוני", url: "", details: "רכיבים: דפי פילו, 200ג אגוזים טחונים, 1 כף סוכר, שמן. סירופ: 1.25 כוסות סוכר, 1 כוס מים, 2 כפות מיץ לימון.\nהוראות: חותכים פילו לפסים, מורחים שמן, מפזרים אגוזים ומגלגלים. מסדרים בתבנית, מורחים שמן ואופים ב180- מעלות. יוצקים סירופ חם מורתח מעל.", isFav: false },
-            { id: "32", name: "פיצה משפחתית (ל5- פיצות)", type: "מנה עיקרית", difficulty: "בינוני", url: "", details: "רכיבים: לבצק: 2 ק\"ג קמח, 1 ליטר מים, 1 כף מלח, 1 כף סוכר, 150 מ\"ל שמן, 5 כפות שמרים. לרוטב: עגבניות מרוסקות, מלח, פלפל, אורגנו, 1200ג גבינה צהובה.\nהוראות: לשים בצק (מלח בסוף) ומתפיחים שעה וחצי. מרדדים, מורחים רוטב, מפזרים גבינה ותוספות ואופים.", isFav: false },
-            { id: "33", name: "עוגת שוקולד כשרה לפסח", type: "קינוח", difficulty: "קל", url: "", details: "רכיבים: 3 ביצים, 200ג שוקולד מריר, 200ג חמאה/שמן, 100ג סוכר, 70ג קורנפלור, מלח גס.\nהוראות: ממיסים שוקולד וחמאה עם סוכר. מוסיפים ביצים בהדרגה תוך ערבוב, ואז קורנפלור. אופים ב180- מעלות ל20- דקות ומפזרים מלח גס מעל.", isFav: false },
-            { id: "34", name: "מלוחיה", type: "מנה עיקרית", difficulty: "בינוני", url: "", details: "רכיבים: מלוחיה, חלקי עוף, חוויאג' למרק, 2 שיני שום, 1 כפית כוסברה טחונה, שמן.\nהוראות: מרתיחים עוף, מנקים קצף, שוטפים ומחזירים לסיר עם מים נקיים ותבלינים. מטגנים שום וכוסברה. מדללים מלוחיה במעט מרק, מוסיפים לסיר העוף ומביאים לגלישה.", isFav: false },
-            { id: "35", name: "עוגת גבינה וביסקוויטים", type: "קינוח", difficulty: "קל", url: "", details: "רכיבים: 500ג גבינה לבנה, 1 פודינג וניל, 2 כפות סוכר, 1 כוס חלב, 1 שמנת להקצפה (250 מ\"ל), ביסקוויטים.\nהוראות: מקציפים שמנת, חלב, פודינג וסוכר. מקפלים גבינה לבנה פנימה. מסדרים בתבנית שכבות של ביסקוויטים וקרם.", isFav: false },
-            { id: "36", name: "רוטב הולנדייז", type: "תוספת", difficulty: "בינוני", url: "", details: "רכיבים: 4 חלמונים, 1 כף מיץ לימון, 120ג חמאה מומסת, מלח, פלפל.\nהוראות: טורפים חלמונים ולימון בבן מארי עד הכפלת נפח. מוסיפים חמאה מומסת בהדרגה תוך ערבוב לאיחוד. מתבלים במלח ופלפל.", isFav: false },
-            { id: "37", name: "ריזוטו שמנת ופטריות", type: "מנה עיקרית", difficulty: "בינוני", url: "https://www.ronyohananov.com/post/%D7%A8%D7%99%D7%96%D7%95%D7%98%D7%95-%D7%A9%D7%9E%D7%A0%D7%AA-%D7%A4%D7%98%D7%A8%D7%99%D7%95%D7%AA-%D7%9E%D7%AA%D7%9B%D7%95%D7%A0%D7%99%D7%9D-%D7%A4%D7%98%D7%A0%D7%98", details: "", isFav: false },
-            { id: "38", name: "בגט עם זיתים", type: "אפייה", difficulty: "בינוני", url: "https://youtu.be/jmJkU3UCQZM?si=OXhAqm9sZdglLpKq", details: "", isFav: false },
-            { id: "39", name: "חלות לשבת", type: "אפייה", difficulty: "קל", url: "", details: "רכיבים: 1 ק\"ג קמח, 2 כפות שמרים, 3-4 כפות סוכר, 2 כפות שמן, 1 כפית מלח, 2-2.5 כוסות מים (אופציונלי: 1 ביצה).\nהוראות: לשים את כל המרכיבים לבצק אחיד, מתפיחים להכפלת נפח, קולעים חלות, מתפיחים שוב ואופים.", isFav: false },
-            { id: "40", name: "חלות לשבת (מתכון מאינסטגרם)", type: "אפייה", difficulty: "בינוני", url: "https://www.instagram.com/reel/C19pcSGiuRb/?igsh=NmtyOGoxcmZjYzFv", details: "", isFav: false },
-            { id: "41", name: "עוגת טריקולד שלוש שכבות", type: "קינוח", difficulty: "בינוני", url: "https://nikib.co.il/dessert-cakes/3414/", details: "", isFav: false },
-            { id: "42", name: "פסטה ביתית", type: "מנה עיקרית", difficulty: "בינוני", url: "", details: "רכיבים: קמח דורום סמולינה, ביצים, מלח (1 ביצה ומלח לכל 100ג קמח).\nהוראות: לשים בצק אחיד, מניחים למנוחה, מרדדים במכונת פסטה וחותכים לצורה הרצויה.", isFav: false },
-            { id: "43", name: "לחמניות המבורגר", type: "אפייה", difficulty: "בינוני", url: "https://kerenagam.co.il/%D7%9C%D7%97%D7%9E%D7%A0%D7%99%D7%95%D7%AA-%D7%94%D7%9E%D7%91%D7%95%D7%A8%D7%92%D7%A8/", details: "", isFav: false },
-            { id: "44", name: "קציצות ברוטב עגבניות", type: "מנה עיקרית", difficulty: "קל", url: "", details: "רכיבים: קציצות: 1 ק\"ג בשר טחון, 3 כפות פירורי לחם, 1 ביצה, סודה לשתייה, שום, מלח, פלפל, פפריקה. רוטב: שמן, שום, פפריקה, רסק עגבניות, עגבניות מגוררות, סילאן, תפוחי אדמה.\nהוראות: מכינים רוטב בסיר, יוצרים קציצות ומבשלים אותן ברוטב עם תפוחי האדמה עד התרככות.", isFav: false },
-            { id: "45", name: "עוגת גזר", type: "אפייה", difficulty: "קל", url: "", details: "רכיבים: 3 גזרים, 100ג אגוזי מלך, 3/4 כוס שמן, 3/4 כוס סוכר, 2 ביצים, 1.25 כוסות קמח תופח, 1 כף קינמון, 1 כפית סודה לשתייה, 1 כפית מלח.\nהוראות: מערבבים רטובים בנפרד ויבשים בנפרד, מאחדים, יוצקים לתבנית ואופים ב180- מעלות 20-30 דקות.", isFav: false },
-            { id: "46", name: "ריבת פירות ביתית (של סבתא ויקי)", type: "תוספת", difficulty: "קל", url: "", details: "רכיבים: 2 ק\"ג פרי (משמש/תות/חושחש), 1 ק\"ג סוכר.\nהוראות: מבשלים פירות וסוכר חצי שעה על אש נמוכה ללא מכסה. מוזגים בצנצנות בעודו חם, פותחים וסוגרים לשחרור אוויר.", isFav: false },
-            { id: "47", name: "תבשיל כתף בקר ביין אדום", type: "מנה עיקרית", difficulty: "קשה", url: "", details: "רכיבים: נתח כתף 5, 1-2 בקבוקי יין אדום יבש, בצל, סלרי, גזר, שום, טימין, מרווה, רוזמרין, ציפורן, אגוז מוסקט, רסק עגבניות, קמח/קורנפלור, ברנדי/וויסקי, שמן, מלח, פלפל.\nהוראות: מצמצמים יין. צורבים בשר, מטגנים ירקות ותבלינים, מוסיפים ברנדי, מחזירים בשר ויוצקים יין ומים. אופים בתנור מכוסה (3 שעות ב150- מעלות), מסננים ומצמצמים את הרוטב.", isFav: false },
-            { id: "48", name: "טבית (חמין עיראקי)", type: "מנה עיקרית", difficulty: "בינוני", url: "", details: "רכיבים: עוף, 2 בצלים, 6 עגבניות, שום, כמון, כורכום, פפריקה, קינמון, ציפורן, רסק עגבניות, 4 כוסות אורז, מלח.\nהוראות: מטגנים בצל, עגבניות, שום ותבלינים. מוסיפים עוף ומים, מבשלים 40 דק'. מוסיפים אורז ומלח ומבשלים על אש נמוכה.", isFav: false },
-            { id: "49", name: "קציצות עוף בריאות", type: "מנה עיקרית", difficulty: "קל", url: "https://www.instagram.com/reel/DKrFCH8oojm/?igsh=MWQxc3d1ZzZzMG5zdA==", details: "", isFav: false },
-            { id: "50", name: "ממרח כבד עוף", type: "מנה ראשונה", difficulty: "קל", url: "", details: "רכיבים: כבדי עוף, בצל, מלח, פלפל, שמן.\nהוראות: מטגנים בצל עד שקפי, מוסיפים כבדים ומטגנים עד בישול. מתבלים, טוחנים בבלנדר ומוסיפים מעט נוזלים לפי צורך למרקם חלק.", isFav: false },
-            { id: "51", name: "עוגת שוקולד לילדים לגן", type: "אפייה", difficulty: "קל", url: "", details: "רכיבים: 2-3 ביצים, 1 כוס סוכר, 1 כוס שמן, 1 כוס מים פושרים, 3/4 כוס מים חמים, 2 כוסות קמח, 1 שקית אבקת אפייה, 1 כפית סודה לשתייה, 4 כפות קקאו. ציפוי: שוקולד מריר, חמאה/חלב, סוכריות.\nהוראות: מקציפים ביצים וסוכר, מוסיפים שמן ומים. מנפים יבשים, מאחדים ואופים ב180- מעלות 40-50 דקות. ממיסים ציפוי ומורחים מעל.", isFav: false },
-            { id: "52", name: "עלי גפן וגמבות ממולאים בעוף טחון ואורז", type: "מנה עיקרית", difficulty: "קשה", url: "", details: "רכיבים: עלי גפן, גמבות, בצלים, 1 ק\"ג עוף טחון, 2 כוסות אורז עגול, עשבי תיבול, שמן זית, תבלינים. רוטב: רסק עגבניות, מים רותחים, מיץ לימון, שמן זית, סוכר, מלח, פלפל.\nהוראות: חולטים עלי גפן. מערבבים מילוי וממלאים. מסדרים בסיר מרופד בבצל, יוצקים רוטב, מניחים משקולת ומבשלים שעה וחצי עד שעתיים על אש נמוכה.", isFav: false },
-            { id: "53", name: "לחם שיפון וחיטה לבנה", type: "אפייה", difficulty: "בינוני", url: "", details: "רכיבים: 290 מ\"ל מים, 3 כפות שמן זית, 1 כפית חומץ, 1 כפית מלח, 200ג קמח שיפון מלא, 250ג קמח חיטה לבן, זרעי פשתן/צ'יה/אגוזים, 1.5 כפיות שמרים יבשים.\nהוראות: לשים את כל הרכיבים לבצק, מתפיחים, מעצבים כיכר ואופים בתנור.", isFav: false },
-            { id: "54", name: "עוגת שוקולד ועוגיות של עדיקוש", type: "קינוח", difficulty: "בינוני", url: "https://www.mako.co.il/food-cooking_magazine/adikosh_sweet_recipes/Recipe-15c95f7dc541481026.htm", details: "", isFav: false }
-        ];
+    <h3>מצרכים:</h3>
+    <ul id="ingredientsList"></ul>
 
-        let recipes = JSON.parse(localStorage.getItem('myRecipes')) || initialRecipes;
-        let selectedCategory = 'הכל';
-        let showFavsOnly = false;
+    <h3>הוראות הכנה:</h3>
+    <ol id="instructionsList"></ol>
+  </div>
+</div>
 
-        function saveToStorage() {
-            localStorage.setItem('myRecipes', JSON.stringify(recipes));
-        }
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const preview = document.getElementById('preview');
+  const processBtn = document.getElementById('processBtn');
+  const apiKeyInput = document.getElementById('apiKey');
+  const loader = document.getElementById('loader');
+  const recipeResult = document.getElementById('recipeResult');
 
-        function resetData() {
-            if (confirm("האם להחזיר את כל מתכוני המקור ולמחוק שינויים?")) {
-                recipes = [...initialRecipes];
-                saveToStorage();
-                renderCategories();
-                filterRecipes();
-            }
-        }
+  let base64Image = "";
+  let mimeType = "";
 
-        function renderCategories() {
-            const categories = ['הכל', ...new Set(recipes.map(r => r.type))];
-            const container = document.getElementById('categoryTabs');
-            container.innerHTML = categories.map(cat => `
-                <button onclick="selectCategory('${cat}')" 
-                        class="px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${selectedCategory === cat ? 'bg-blue-600 text-white shadow' : 'bg-blue-100 text-blue-800 hover:bg-blue-200'}">
-                    ${cat}
-                </button>
-            `).join('');
-        }
+  // טעינת מפתח שמור בלוקל סטורג'
+  apiKeyInput.value = localStorage.getItem('gemini_api_key') || '';
+  apiKeyInput.addEventListener('input', () => {
+    localStorage.setItem('gemini_api_key', apiKeyInput.value.trim());
+  });
 
-        function selectCategory(cat) {
-            selectedCategory = cat;
-            renderCategories();
-            filterRecipes();
-        }
+  fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      mimeType = file.type;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        base64Image = event.target.result.split(',')[1];
+        preview.src = event.target.result;
+        preview.style.display = 'block';
+        processBtn.disabled = false;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
 
-        function toggleFavFilter() {
-            showFavsOnly = !showFavsOnly;
-            const btn = document.getElementById('favFilterBtn');
-            if (showFavsOnly) {
-                btn.classList.add('bg-red-50', 'border-red-300', 'text-red-600');
-            } else {
-                btn.classList.remove('bg-red-50', 'border-red-300', 'text-red-600');
-            }
-            filterRecipes();
-        }
+  processBtn.addEventListener('click', async () => {
+    const apiKey = apiKeyInput.value.trim();
+    if (!apiKey) {
+      alert('נא להזין מפתח API של Gemini');
+      return;
+    }
 
-        function toggleFav(id, event) {
-            event.stopPropagation();
-            const recipe = recipes.find(r => r.id === id);
-            if (recipe) {
-                recipe.isFav = !recipe.isFav;
-                saveToStorage();
-                filterRecipes();
-            }
-        }
+    loader.style.display = 'block';
+    recipeResult.style.display = 'none';
+    processBtn.disabled = true;
 
-        function deleteRecipe(id, event) {
-            event.stopPropagation();
-            if (confirm("האם למחוק את המתכון הזה?")) {
-                recipes = recipes.filter(r => r.id !== id);
-                saveToStorage();
-                renderCategories();
-                filterRecipes();
-            }
-        }
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
-        function filterRecipes() {
-            const searchVal = document.getElementById('searchInput').value.toLowerCase();
-            
-            const filtered = recipes.filter(r => {
-                const matchesCat = selectedCategory === 'הכל' || r.type === selectedCategory;
-                const matchesSearch = r.name.toLowerCase().includes(searchVal) || (r.details && r.details.toLowerCase().includes(searchVal));
-                const matchesFav = !showFavsOnly || r.isFav;
-                return matchesCat && matchesSearch && matchesFav;
-            });
+    const prompt = `
+      נתח את תמונת המתכון והחזר תשובה בפורמט JSON בלבד.
+      המבנה הנדרש:
+      {
+        "title": "שם המתכון",
+        "prep_time": "זמן הכנה",
+        "cook_time": "זמן אפייה/בישול",
+        "servings": "כמות מנות",
+        "ingredients": ["מצרך 1", "מצרך 2"],
+        "instructions": ["שלב 1", "שלב 2"]
+      }
+    `;
 
-            renderGrid(filtered);
-        }
+    const requestBody = {
+      contents: [{
+        parts: [
+          { text: prompt },
+          { inline_data: { mime_type: mimeType, data: base64Image } }
+        ]
+      }],
+      generationConfig: {
+        response_mime_type: "application/json"
+      }
+    };
 
-        function renderGrid(list) {
-            const grid = document.getElementById('recipeGrid');
-            const empty = document.getElementById('emptyState');
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody)
+      });
 
-            if (list.length === 0) {
-                grid.innerHTML = '';
-                empty.classList.remove('hidden');
-                return;
-            }
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error.message);
+      }
 
-            empty.classList.add('hidden');
-            grid.innerHTML = list.map(r => {
-                const difficultyColor = r.difficulty === 'קל' ? 'bg-green-100 text-green-800' : r.difficulty === 'בינוני' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800';
-                
-                return `
-                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-blue-100 flex flex-col overflow-hidden relative group">
-                    <div class="p-5 flex-grow">
-                        <div class="flex justify-between items-start gap-2 mb-2">
-                            <span class="text-xs px-2.5 py-1 rounded-full font-medium ${difficultyColor}">${r.difficulty}</span>
-                            <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full font-medium">${r.type}</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-800 mb-2 leading-snug">${r.name}</h3>
-                        
-                        ${r.details ? `
-                            <p class="text-xs text-slate-600 bg-blue-50/50 p-3 rounded-lg border border-blue-50 whitespace-pre-line leading-relaxed mb-3">
-                                ${r.details}
-                            </p>
-                        ` : ''}
+      const recipeText = data.candidates[0].content.parts[0].text;
+      const recipe = JSON.parse(recipeText);
 
-                        ${r.url ? `
-                            <a href="${r.url}" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 font-medium underline mt-1">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i> לצפייה במתכון המלא
-                            </a>
-                        ` : ''}
-                    </div>
+      renderRecipe(recipe);
+    } catch (err) {
+      alert('שגיאה בפענוח התמונה: ' + err.message);
+    } finally {
+      loader.style.display = 'none';
+      processBtn.disabled = false;
+    }
+  });
 
-                    <!-- Footer / Actions -->
-                    <div class="bg-slate-50 px-5 py-3 border-t border-slate-100 flex justify-between items-center text-slate-400">
-                        <button onclick="toggleFav('${r.id}', event)" class="hover:text-red-500 transition">
-                            <i class="${r.isFav ? 'fa-solid text-red-500' : 'fa-regular'} fa-heart text-lg"></i>
-                        </button>
-                        <div class="flex gap-2">
-                            <button onclick="openModal('${r.id}')" class="text-slate-400 hover:text-blue-600 transition text-sm px-2 py-1">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
-                            <button onclick="deleteRecipe('${r.id}', event)" class="text-slate-400 hover:text-red-600 transition text-sm px-2 py-1">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                `;
-            }).join('');
-        }
+  function renderRecipe(data) {
+    document.getElementById('recipeTitle').textContent = data.title || 'מתכון ללא שם';
+    document.getElementById('prepTime').textContent = data.prep_time || '-';
+    document.getElementById('cookTime').textContent = data.cook_time || '-';
+    document.getElementById('servings').textContent = data.servings || '-';
 
-        function openModal(id = null) {
-            const modal = document.getElementById('modal');
-            const title = document.getElementById('modalTitle');
-            
-            if (id) {
-                const r = recipes.find(item => item.id === id);
-                title.innerText = "עריכת מתכון";
-                document.getElementById('recipeId').value = r.id;
-                document.getElementById('recipeName').value = r.name;
-                document.getElementById('recipeType').value = r.type;
-                document.getElementById('recipeDifficulty').value = r.difficulty;
-                document.getElementById('recipeUrl').value = r.url || '';
-                document.getElementById('recipeDetails').value = r.details || '';
-            } else {
-                title.innerText = "הוספת מתכון חדש";
-                document.getElementById('recipeForm').reset();
-                document.getElementById('recipeId').value = '';
-            }
+    const ingredientsList = document.getElementById('ingredientsList');
+    ingredientsList.innerHTML = '';
+    (data.ingredients || []).forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      ingredientsList.appendChild(li);
+    });
 
-            modal.classList.remove('hidden');
-        }
+    const instructionsList = document.getElementById('instructionsList');
+    instructionsList.innerHTML = '';
+    (data.instructions || []).forEach(step => {
+      const li = document.createElement('li');
+      li.textContent = step;
+      instructionsList.appendChild(li);
+    });
 
-        function closeModal() {
-            document.getElementById('modal').classList.add('hidden');
-        }
+    recipeResult.style.display = 'block';
+  }
+</script>
 
-        function saveRecipe(event) {
-            event.preventDefault();
-            const id = document.getElementById('recipeId').value;
-            const name = document.getElementById('recipeName').value;
-            const type = document.getElementById('recipeType').value;
-            const difficulty = document.getElementById('recipeDifficulty').value;
-            const url = document.getElementById('recipeUrl').value;
-            const details = document.getElementById('recipeDetails').value;
-
-            if (id) {
-                const index = recipes.findIndex(r => r.id === id);
-                if (index !== -1) {
-                    recipes[index] = { ...recipes[index], name, type, difficulty, url, details };
-                }
-            } else {
-                const newRecipe = {
-                    id: Date.now().toString(),
-                    name,
-                    type,
-                    difficulty,
-                    url,
-                    details,
-                    isFav: false
-                };
-                recipes.unshift(newRecipe);
-            }
-
-            saveToStorage();
-            renderCategories();
-            filterRecipes();
-            closeModal();
-        }
-
-        // Initialize App
-        renderCategories();
-        filterRecipes();
-    </script>
 </body>
 </html>
